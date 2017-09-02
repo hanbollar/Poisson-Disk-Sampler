@@ -1,7 +1,7 @@
 # CIS700FANFU-Simulation
 
 ## Part 1 - Implement Fast Poisson Disk Sampling
-###Overview: 
+### Overview: 
 
 I am using the Bridson's paper on [Poisson Disk Sampling Method for Arbitrary Dimensions](./Part1Info/PoissonDiskPaper.pdf) to make a point cloud representation of a given mesh in both two and three dimensions. Previous sampling techniques include Cook's 1986 paper that discusses an implementation for Stochastic Sampling [a Monte Carlo technique] and Dunbar and Humphrey’s paper in 2006 that describes a dated implementation of an implementation for the sampling technique. 
 
