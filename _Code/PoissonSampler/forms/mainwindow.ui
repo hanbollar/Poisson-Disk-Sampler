@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>610</width>
+    <height>552</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>OpenGLDemo</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="MyGL" name="mygl">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>581</width>
+      <height>501</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>610</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionCamera_Controls"/>
+   </widget>
+   <widget class="QMenu" name="menuLoad_Object">
+    <property name="title">
+     <string>Load Object</string>
+    </property>
+    <addaction name="actionLoad_My_Object"/>
+    <addaction name="actionLoad_Given_Object"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+   <addaction name="menuLoad_Object"/>
+  </widget>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionCamera_Controls">
+   <property name="text">
+    <string>Camera Controls</string>
+   </property>
+  </action>
+  <action name="actionLoad_My_Object">
+   <property name="text">
+    <string>My Object</string>
+   </property>
+  </action>
+  <action name="actionLoad_Given_Object">
+   <property name="text">
+    <string>Given Object</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyGL</class>
+   <extends>QOpenGLWidget</extends>
+   <header>mygl.h</header>
+   <slots>
+    <signal>sig_addHalfEdge(QListWidgetItem*)</signal>
+    <signal>sig_addVertex(QListWidgetItem*)</signal>
+    <signal>sig_addFace(QListWidgetItem*)</signal>
+    <signal>sig_resetChangePosSpins(double)</signal>
+    <signal>sig_DisplayColorRed(double)</signal>
+    <signal>sig_DisplayColorGreen(double)</signal>
+    <signal>sig_DisplayColorBlue(double)</signal>
+    <signal>sig_resetChangeColSpins(double)</signal>
+    <signal>sig_halfEdgeChanged(QListWidgetItem*)</signal>
+    <signal>sig_vertexChanged(QListWidgetItem*)</signal>
+    <signal>sig_faceChanged(QListWidgetItem*)</signal>
+    <signal>sig_clearList()</signal>
+    <slot>slot_vertexItemClicked(QListWidgetItem*)</slot>
+    <slot>slot_xChangedBy(double)</slot>
+    <slot>slot_yChangedBy(double)</slot>
+    <slot>slot_zChangedBy(double)</slot>
+    <slot>slot_faceItemClicked(QListWidgetItem*)</slot>
+    <slot>slot_hEdgeItemClicked(QListWidgetItem*)</slot>
+    <slot>slot_redChangedTo(double)</slot>
+    <slot>slot_blueChangedTo(double)</slot>
+    <slot>slot_greenChangedTo(double)</slot>
+    <slot>slot_loadFileData(QString)</slot>
+    <slot>slot_addVertexToCurrentHighlightedEdge()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>sig_filePathString(QString)</signal>
+   <receiver>mygl</receiver>
+   <slot>slot_loadFileData(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>499</x>
+     <y>306</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>sig_filePathString(QString)</signal>
+ </slots>
+</ui>
