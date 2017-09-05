@@ -1,0 +1,11 @@
+{
+	"objects":
+	[
+		{
+			"type": "obj",
+			"name": "Wahoo",
+			"filename": "wahoo.obj",
+			"texture": "wahoo.bmp"
+		}
+	]
+}

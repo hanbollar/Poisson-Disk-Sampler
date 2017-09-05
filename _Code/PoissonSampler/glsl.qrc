@@ -4,5 +4,7 @@
         <file>glsl/lambert.vert.glsl</file>
         <file>glsl/flat.frag.glsl</file>
         <file>glsl/flat.vert.glsl</file>
+        <file>glsl/renderview.frag.glsl</file>
+        <file>glsl/renderview.vert.glsl</file>
     </qresource>
 </RCC>

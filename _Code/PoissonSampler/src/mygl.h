@@ -1,56 +1,64 @@
-#ifndef MYGL_H
-#define MYGL_H
-
-#include <glwidget277.h>
-#include <utils.h>
-#include <shaderprogram.h>
-#include <scene/cylinder.h>
-#include <scene/sphere.h>
-#include "camera.h"
+#pragma once
 
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
+#include <QRubberBand>
+#include <QMouseEvent>
 
-#include "halfedgemesh.h"
-#include "mylistwidget.h"
+#include <openGL/glwidget277.h>
+#include <la.h>
+#include <openGL/shaderprogram.h>
+#include <scene/camera.h>
+#include <scene/scene.h>
+#include <la.h>
+#include <scene/jsonreader.h>
+#include <integrators/integrator.h>
 
-#include "highlightface.h"
-#include "highlightvertex.h"
-#include "highlighthedge.h"
+#include <QTimer>
+#include <QTime>
+#include <QSound>
+
+class QOpenGLTexture;
+
+enum IntegratorType
+{
+    DIRECT_LIGHTING,
+    INDIRECT_LIGHTING,
+    FULL_LIGHTING,
+    NAIVE_LIGHTING,
+    PHOTON_LIGHTING
+};
 
 class MyGL
     : public GLWidget277
 {
     Q_OBJECT
 private:
-    Cylinder geom_cylinder;// The instance of a unit cylinder we can use to render any cylinder
-    Sphere geom_sphere;// The instance of a unit sphere we can use to render any sphere
-    ShaderProgram prog_lambert;// A shader program that uses lambertian reflection
-    ShaderProgram prog_flat;// A shader program that uses "flat" reflection (no shadowing at all)
+    QOpenGLVertexArrayObject vao;
 
-    GLuint vao; // A handle for our vertex array object. This will store the VBOs created in our geometry classes.
-                // Don't worry too much about this. Just know it is necessary in order to render geometry.
+    ShaderProgram prog_lambert;
+    ShaderProgram prog_flat;
 
-    Camera gl_camera;
+    Camera gl_camera;//This is a camera we can move around the scene to view it from any angle.
+                                //However, the camera defined in the config file is the one from which the scene will be rendered.
+                                //If you move gl_camera, you will be able to see the viewing frustum of the scene's camera.
 
-    /// Timer linked to timerUpdate(). Fires approx. 60 times per second
-    QTimer timer;
+    Scene scene;
+    Sampler* sampler;
+    int recursionLimit;
+    JSONReader json_reader;
+    IntegratorType integratorType;
 
-    //mesh data variables
-    HalfEdgeMesh geom_halfMesh; //-HB
-    Vertex* selectedVert; //-HB
-    Face* selectedFace; //-HB
-    HalfEdge* selectedHEdge; //-HB
+    QString output_filepath;
 
-    //highlighting variables
-    HighlightVertex hVert; //-HB
-    HighlightFace hFace; //-HB
-    HighlightHEdge hHEdge; //-HB
+    QTimer render_event_timer;
 
-    //openGL Fun variables
-    int timeCount; //-HB
-    int renderMode; //-HB
-    int posMode; //-HB
+    QSound completeSFX;
+
+    QTime renderTimer;
+
+    bool makeBVH;
+    int maxBVHPrims;
 
 public:
     explicit MyGL(QWidget *parent = 0);
@@ -60,62 +68,50 @@ public:
     void resizeGL(int w, int h);
     void paintGL();
 
-    HalfEdge* getPrevHEdge(HalfEdge* h); //-HB
+    void SceneLoadDialog();
+    void GLDrawScene();
+    void ResizeToSceneCamera();
+
+    void RenderScene();
+    void GLDrawProgressiveView();
+
+    void completeRender();
+
+private:
+    QRubberBand *rubberBand;
+    bool move_rubberband;
+    QPoint rubberband_offset;
+    QPoint origin;
+    bool progressive_render = true;
+    bool something_rendered = false;
+
+    QOpenGLShaderProgram prog_progressive;
+    int prog_progressive_attribute_position;
+    int prog_progressive_attribute_texcoord;
+    bool is_rendering = false;
+    GLuint progressive_position_buffer;
+    QOpenGLTexture* progressive_texture = nullptr;
 
 protected:
     void keyPressEvent(QKeyEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void reorderRect();
 
-    //used when parsing the file for data
-    Vertex* parseLineForVertex(std::string); //-HB
-    Face* parseLineForFace(std::string,
-                           std::vector<Vertex*>&,
-                           std::map<Face*,
-                           std::vector<Vertex*>>&); //-HB
-    void buildHEdges(std::vector<Face*> &,
-                     std::vector<HalfEdge*>&,
-                     std::map<Face*, std::vector<Vertex*>>&,
-                     std::map<Vertex*, std::vector<HalfEdge*>>&,
-                     int&);
-    void linkSymsForHEdges(std::vector<HalfEdge*>&,
-                           std::map<Vertex*, std::vector<HalfEdge*>>&);
-
-
-private slots:
-    /// Slot that gets called ~60 times per second
-    void timerUpdate();
 
 public slots:
-//    void slot_vertexItemClicked(QListWidgetItem*);
-//    void slot_faceItemClicked(QListWidgetItem*);
-//    void slot_hEdgeItemClicked(QListWidgetItem*);
-//    void slot_xChangedBy(double);
-//    void slot_yChangedBy(double);
-//    void slot_zChangedBy(double);
-//    void slot_redChangedTo(double);
-//    void slot_blueChangedTo(double);
-//    void slot_greenChangedTo(double);
-
-    void slot_loadFileData(QString);
-
-    void slot_addVertexToCurrentHighlightedEdge();
+    void slot_SetNumSamplesSqrt(int);
+    void slot_SetRecursionLimit(int);
+    void slot_SetProgressiveRender(bool);
+    void slot_SetIntegratorType(int);
+    void slot_UseBVH(bool);
+    void slot_SetMaxBVHPrims(int);
 
 signals:
-    void sig_addHalfEdge(QListWidgetItem*);
-    void sig_addVertex(QListWidgetItem*);
-    void sig_addFace(QListWidgetItem*);
+    void sig_ResizeToCamera(int,int);
+    void sig_DisableGUI(bool);
 
-//    void sig_resetChangePosSpins(double);
-//    void sig_resetChangeColSpins(double);
-//    void sig_DisplayColorRed(double);
-//    void sig_DisplayColorGreen(double);
-//    void sig_DisplayColorBlue(double);
-
-//    void sig_halfEdgeChanged(QListWidgetItem*);
-//    void sig_faceChanged(QListWidgetItem*);
-//    void sig_vertexChanged(QListWidgetItem*);
-
-    void sig_clearList();
+private slots:
+     void onRenderUpdate();
 };
-
-
-#endif // MYGL_H

@@ -21,7 +21,6 @@ void debugFormatVersion()
 
 int main(int argc, char *argv[])
 {
-
     QApplication a(argc, argv);
 
     // Set OpenGL 3.2 and, optionally, 4-sample multisampling
@@ -33,7 +32,9 @@ int main(int argc, char *argv[])
 
     /*** AUTOMATIC TESTING: DO NOT MODIFY ***/
     /*** Check whether automatic testing is enabled */
-    /***/ if (qgetenv("CIS277_AUTOTESTING") != nullptr) format.setSamples(0);
+    /***/ if (qgetenv("CIS277_AUTOTESTING") != nullptr) {
+        format.setSamples(0);
+    }
 
     QSurfaceFormat::setDefaultFormat(format);
     debugFormatVersion();

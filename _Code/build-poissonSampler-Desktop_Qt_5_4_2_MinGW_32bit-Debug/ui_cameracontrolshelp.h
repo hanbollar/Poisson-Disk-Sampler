@@ -33,10 +33,11 @@ public:
     QLabel *label_8;
     QLabel *label_9;
     QLabel *label_10;
+    QLabel *label_11;
+    QLabel *label_12;
     QLabel *label_13;
     QLabel *label_14;
     QFrame *line;
-    QLabel *label_11;
 
     void setupUi(QWidget *CameraControlsHelp)
     {
@@ -83,6 +84,14 @@ public:
         label_10->setObjectName(QStringLiteral("label_10"));
         label_10->setGeometry(QRect(10, 110, 111, 21));
         label_10->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        label_11 = new QLabel(CameraControlsHelp);
+        label_11->setObjectName(QStringLiteral("label_11"));
+        label_11->setGeometry(QRect(150, 90, 251, 21));
+        label_11->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        label_12 = new QLabel(CameraControlsHelp);
+        label_12->setObjectName(QStringLiteral("label_12"));
+        label_12->setGeometry(QRect(150, 110, 251, 21));
+        label_12->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         label_13 = new QLabel(CameraControlsHelp);
         label_13->setObjectName(QStringLiteral("label_13"));
         label_13->setGeometry(QRect(10, 130, 141, 21));
@@ -96,11 +105,6 @@ public:
         line->setGeometry(QRect(113, 10, 31, 161));
         line->setFrameShape(QFrame::VLine);
         line->setFrameShadow(QFrame::Sunken);
-        label_11 = new QLabel(CameraControlsHelp);
-        label_11->setObjectName(QStringLiteral("label_11"));
-        label_11->setGeometry(QRect(150, 100, 251, 31));
-        label_11->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
-        label_11->setWordWrap(true);
 
         retranslateUi(CameraControlsHelp);
 
@@ -120,9 +124,10 @@ public:
         label_8->setText(QApplication::translate("CameraControlsHelp", "Left arrow: Rotate left", 0));
         label_9->setText(QApplication::translate("CameraControlsHelp", "Q: Move down", 0));
         label_10->setText(QApplication::translate("CameraControlsHelp", "E: Move up", 0));
+        label_11->setText(QApplication::translate("CameraControlsHelp", "G: Move render camera to preview camera", 0));
+        label_12->setText(QApplication::translate("CameraControlsHelp", "F: Move preview camera to render camera", 0));
         label_13->setText(QApplication::translate("CameraControlsHelp", "1: Increase FOV", 0));
         label_14->setText(QApplication::translate("CameraControlsHelp", "2: Decrease FOV", 0));
-        label_11->setText(QApplication::translate("CameraControlsHelp", "R: Reset camera to default position and orientation", 0));
     } // retranslateUi
 
 };

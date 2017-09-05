@@ -55,7 +55,7 @@ namespace detail
 	(
 		length_t i
 	) const
-	{
+        {
 		assert(i < this->length());
 		return this->value[i];
 	}

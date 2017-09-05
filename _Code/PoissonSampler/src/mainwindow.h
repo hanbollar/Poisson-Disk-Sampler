@@ -1,10 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
+#include <cameracontrolshelp.h>
 
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -19,17 +20,18 @@ public:
 
 private slots:
     void on_actionQuit_triggered();
+
+    void on_actionLoad_Scene_triggered();
+    void slot_ResizeToCamera(int,int);
+
+    void on_actionRender_triggered();
+
     void on_actionCamera_Controls_triggered();
 
-    void on_actionLoad_My_Object_triggered(); //-HB
-    void on_actionLoad_Given_Object_triggered(); //-HB
+public slots:
+    void slot_DisableGUI(bool);
 
 private:
     Ui::MainWindow *ui;
-
-signals:
-    void sig_filePathString(QString filePath);
+    CameraControlsHelp help;
 };
-
-
-#endif // MAINWINDOW_H

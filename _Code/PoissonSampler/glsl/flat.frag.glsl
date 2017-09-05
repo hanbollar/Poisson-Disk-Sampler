@@ -1,11 +1,8 @@
 #version 150
 // ^ Change this to version 130 if you have compatibility issues
 
-// Refer to the lambert shader files for useful comments
-
-in vec4 fs_Col;
-
-out vec4 out_Col;
+in vec3 fs_Col;
+out vec3 out_Col;
 
 void main()
 {
