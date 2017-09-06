@@ -9,7 +9,7 @@
 #include "scene.h"
 #include "raytracing/ray.h"
 #include "lights/light.h"
-#include "samplers/sampler.h"
+//#include "samplers/sampler.h"
 
 #include "scene/geometry/primitive.h"
 #include "bounds.h"
