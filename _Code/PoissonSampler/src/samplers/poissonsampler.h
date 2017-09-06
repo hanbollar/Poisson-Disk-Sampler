@@ -26,7 +26,10 @@ public:
     Bounds3f* bbox;
     int nDimensions;
 \
-    std::vector<Sample*> poissonAlg();
+    std::vector<std::vector<std::vector<Sample*>>> poissonAlg();
+    glm::vec3 posToGridLoc(glm::vec3 p, glm::vec3 voxelDim);
+    glm::vec3 gridLocToPos(glm::vec3 gLoc, glm::vec3 voxelDim);
+    bool validLocWithinObj(glm::vec3 p);
 
     // notes:
     // sampler only created by being inputted specified mesh from scene
