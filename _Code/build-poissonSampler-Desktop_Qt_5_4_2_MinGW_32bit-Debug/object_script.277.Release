@@ -51,6 +51,7 @@ INPUT(
 ./release\photonmap.o
 ./release\photonIntegrator.o
 ./release\poissonsampler.o
+./release\poissonbvh.o
 ./release\qrc_glsl.o
 ./release\qrc_sfx.o
 ./release\moc_mainwindow.o

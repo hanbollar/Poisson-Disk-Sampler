@@ -51,6 +51,7 @@ INPUT(
 ./debug\photonmap.o
 ./debug\photonIntegrator.o
 ./debug\poissonsampler.o
+./debug\poissonbvh.o
 ./debug\qrc_glsl.o
 ./debug\qrc_sfx.o
 ./debug\moc_mainwindow.o

@@ -54,7 +54,8 @@ SOURCES += \
     $$PWD/scene/geometry/ignoreGeoLight.cpp \
     $$PWD/scene/photonmap.cpp \
     $$PWD/integrators/photonIntegrator.cpp \
-    $$PWD/samplers/poissonsampler.cpp
+    $$PWD/samplers/poissonsampler.cpp \
+    $$PWD/samplers/poissonbvh.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -110,4 +111,5 @@ HEADERS += \
     $$PWD/scene/geometry/ignoreGeoLight.h \
     $$PWD/scene/photonmap.h \
     $$PWD/integrators/photonIntegrator.h \
-    $$PWD/samplers/poissonsampler.h
+    $$PWD/samplers/poissonsampler.h \
+    $$PWD/samplers/poissonbvh.h

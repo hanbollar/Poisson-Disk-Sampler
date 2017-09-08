@@ -9,7 +9,7 @@ CONFIG += debug
 INCLUDEPATH += include
 
 include(src/src.pri)
-include(src/eigen/Eigen/Dense)
+include(src/../include/eigen/Eigen/Dense)
 
 FORMS += forms/mainwindow.ui \
     forms/cameracontrolshelp.ui

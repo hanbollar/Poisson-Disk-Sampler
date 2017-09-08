@@ -105,7 +105,7 @@ void PoissonSampler::poissonAlg(){
  * set up background grid
  * for now grid dimensions based entirely on const radius as declared.
  */
-void PoissonSampler::initializeBackgroundGrids() {
+void PoissonSampler::initializeBackgroundGridsandBVH() {
     // grid dim: RADIUS/(dim_n)^1/2 --> bigger r is bigger voxels is fewer samples
 
     int nDim = 3;
@@ -129,6 +129,8 @@ void PoissonSampler::initializeBackgroundGrids() {
                                    voxelDim[0],
                                    std::vector<Sample*>(voxelDim[1])
                              );
+
+    /* NEED TO INITALIZE BVH */ /** -----------------------------TODO----------------------------**/
 }
 
 /**
