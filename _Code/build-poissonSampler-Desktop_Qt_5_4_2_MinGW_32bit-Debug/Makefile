@@ -164,6 +164,7 @@ Makefile: ../PoissonSampler/poissonSampler.pro C:/Qt/Qt5.4.2/5.4/mingw491_32/mks
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/features/default_pre.prf \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/features/win32/default_pre.prf \
 		../PoissonSampler/src/src.pri \
+		../PoissonSampler/src/eigen/Eigen/Dense \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/features/resolve_config.prf \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/features/exclusive_builds_post.prf \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/features/default_post.prf \
@@ -292,6 +293,7 @@ C:\Qt\Qt5.4.2\5.4\mingw491_32\mkspecs\features\exclusive_builds.prf:
 C:\Qt\Qt5.4.2\5.4\mingw491_32\mkspecs\features\default_pre.prf:
 C:\Qt\Qt5.4.2\5.4\mingw491_32\mkspecs\features\win32\default_pre.prf:
 ..\PoissonSampler\src\src.pri:
+..\PoissonSampler\src\eigen\Eigen\Dense:
 C:\Qt\Qt5.4.2\5.4\mingw491_32\mkspecs\features\resolve_config.prf:
 C:\Qt\Qt5.4.2\5.4\mingw491_32\mkspecs\features\exclusive_builds_post.prf:
 C:\Qt\Qt5.4.2\5.4\mingw491_32\mkspecs\features\default_post.prf:

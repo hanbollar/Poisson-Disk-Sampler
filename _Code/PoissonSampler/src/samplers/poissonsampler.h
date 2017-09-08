@@ -6,29 +6,40 @@
 #include "scene/bvh.h"
 #include <iostream>
 
-class Sample;
+#include "eigen/Eigen/Dense"
 
-float RADIUS = 0.25f;
+class Sample;
 
 class PoissonSampler
 {
 public:
     //assuming only inputting primitives in scene that ALL need to be filled
-    PoissonSampler(Mesh* mesh, Scene* scene, int dim)
+    PoissonSampler(Mesh* mesh, Scene* scene, bool isThreeDim)
         : m(mesh), s(scene), b(s->bvh), bbox(new Bounds3f(b->WorldBound())),
-            nDimensions(dim) {}
-    ~PoissonSampler() {}
+            threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)) {
+
+        initializeBackgroundGrids();
+    }
+    ~PoissonSampler() { }
 
     // all variables below are initialized in the constructor's list
     Mesh* m;
     Scene* s;
     BVHAccel* b;
     Bounds3f* bbox;
-    int nDimensions;
+    bool threeDim;
+    glm::vec3 voxelDim;
+
+    float RADIUS = 0.25f;
+
+    std::vector<std::vector<std::vector<Sample*>>> backgroundGrid3D;
+    std::vector<std::vector<Sample*>> backgroundGrid2D;
+
+    void initializeBackgroundGrids();
 \
-    std::vector<std::vector<std::vector<Sample*>>> poissonAlg();
-    glm::vec3 posToGridLoc(glm::vec3 p, glm::vec3 voxelDim);
-    glm::vec3 gridLocToPos(glm::vec3 gLoc, glm::vec3 voxelDim);
+    void poissonAlg();
+
+    glm::vec3 posToGridLoc(glm::vec3 p);
     bool validLocWithinObj(glm::vec3 p);
 
     // notes:
