@@ -130,7 +130,7 @@ void PoissonSampler::initializeBackgroundGridsandBVH() {
                                    std::vector<Sample*>(voxelDim[1])
                              );
 
-    /* NEED TO INITALIZE BVH */ /** -----------------------------TODO----------------------------**/
+    bvh = new PoissonBVH(m);
 }
 
 /**
@@ -166,13 +166,13 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
 bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
     /** ********** TO DO - do direct for loop for all triangles or use bvh for faster solutions ***************/
 
-    // if hit odd num of triangles for 3d then within
-    // if hit even num of triangles for 3d then not within
-
-    // to check if within for 2d then first check at proper z loc
-    // and just check if x and y are within appropriate bounds2f for it
-
-    //WRITE NEW POISSON BVH CLASS - OR JUST REWRITE PREV BVH TO MAKE SURE WORKS BUT YEA - JUST REWRITE POISSON BVH SINCE PREV BVH PROB DOESNT WORK FOR PURPOSES//
+    if (threeDim) {
+        // if hit odd num of triangles for 3d then within?
+        // if hit even num of triangles for 3d then not within?
+    } else {
+        // to check if within for 2d then first check at proper z loc
+        // and just check if x and y are within appropriate bounds2f for it
+    }
 
     return false;
 }

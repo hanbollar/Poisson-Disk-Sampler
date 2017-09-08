@@ -31,7 +31,7 @@ public:
     Bounds3f* bbox;
     bool threeDim;
     glm::vec3 voxelDim;
-    PoissonBVH bvh;
+    PoissonBVH* bvh;
 
     float RADIUS = 0.25f;
 
