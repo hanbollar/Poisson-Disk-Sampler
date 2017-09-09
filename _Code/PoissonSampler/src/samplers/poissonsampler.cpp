@@ -35,6 +35,14 @@ void PoissonSampler::poissonAlg(){
         bool addedK = false;
         for (int i=0; i<K; i++) {
             glm::vec3 pos = glm::vec3(0.0f); /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
+            /** ------------- TO IMPLEMENT THIS PART HERE: SAMPLING RANDOM LOC IN 3D SPACE ------------- **/;
             //note must make sure ^^ provides valid position that will be within the current grid area so sampling must check that first
             glm::vec3 gLoc = posToGridLoc(pos);
 
@@ -112,6 +120,9 @@ void PoissonSampler::initializeBackgroundGridsandBVH() {
     if (!threeDim) { nDim = 2; }
 
     float maxVoxelSize = RADIUS/(nDim*nDim);
+    bvh = new PoissonBVH(m);
+    bbox = bvh->root->bbox;
+
     Point3f maxP = bbox->max;
     Point3f minP = bbox->min;
 
@@ -129,8 +140,6 @@ void PoissonSampler::initializeBackgroundGridsandBVH() {
                                    voxelDim[0],
                                    std::vector<Sample*>(voxelDim[1])
                              );
-
-    bvh = new PoissonBVH(m);
 }
 
 /**
@@ -164,15 +173,36 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
  * @return true, if within; false, otherwise.
  */
 bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
-    /** ********** TO DO - do direct for loop for all triangles or use bvh for faster solutions ***************/
 
     if (threeDim) {
-        // if hit odd num of triangles for 3d then within?
-        // if hit even num of triangles for 3d then not within?
-    } else {
-        // to check if within for 2d then first check at proper z loc
-        // and just check if x and y are within appropriate bounds2f for it
+
+        int numIsx = 0;
+        Intersection isx = Intersection();
+        Ray r = Ray(s->camera.eye, s->camera.eye - p);
+
+        if (bvh->intersect(r, &isx, &numIsx)) {
+            (numIsx %2 == 0) ? false : true;
+        }
     }
 
+    // else: 2dim
+
+//         to check if within for 2d then first check at proper z loc
+//         and just check if x and y are within appropriate bounds2f for it
+
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
+
     return false;
+
+
 }

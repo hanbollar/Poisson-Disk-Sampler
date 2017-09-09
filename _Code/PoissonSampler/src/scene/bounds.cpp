@@ -122,3 +122,15 @@ Bounds3f Union(const Bounds3f& b1, const glm::vec4& p)
     // the valid check for b1 not included here
     return Union(b1, Point3f(p));
 }
+
+//added in 700 proj with fanfu//
+Bounds3f* Union(Bounds3f* b1, Point3f p) {
+    if (b1->min.x > b1->max.x) { return new Bounds3f(p); }
+    Point3f minP = Point3f(std::min(b1->min.x, p.x),
+                          std::min(b1->min.y, p.y),
+                          std::min(b1->min.z, p.z));
+    Point3f maxP = Point3f(std::max(b1->max.x, p.x),
+                           std::max(b1->max.y, p.y),
+                           std::max(b1->max.z, p.z));
+    return new Bounds3f(minP, maxP);
+}

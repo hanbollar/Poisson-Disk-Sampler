@@ -17,17 +17,17 @@ class PoissonSampler
 public:
     //assuming only inputting primitives in scene that ALL need to be filled
     PoissonSampler(Mesh* mesh, Scene* scene, bool isThreeDim)
-        : m(mesh), s(scene), b(s->bvh), bbox(new Bounds3f(b->WorldBound())),
+        : m(mesh), s(scene), bvh(nullptr), /*b(s->bvh), */ bbox(nullptr),
             threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)) {
 
         initializeBackgroundGridsandBVH();
     }
-    ~PoissonSampler() { /** ------- TO DO ------ **/ /** STILL NEED TO DESTROY BACKGROUND GRIDS & BVH**/ }
+    ~PoissonSampler() { backgroundGrid3D.clear(); backgroundGrid2D.clear(); }
 
     // all variables below are initialized in the constructor's list
     Mesh* m;
     Scene* s;
-    BVHAccel* b;
+//    BVHAccel* b;
     Bounds3f* bbox;
     bool threeDim;
     glm::vec3 voxelDim;
