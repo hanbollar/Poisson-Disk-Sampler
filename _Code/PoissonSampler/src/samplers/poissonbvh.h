@@ -9,19 +9,21 @@
 #include "scene/bounds.h"
 #include "raytracing/intersection.h"
 #include "raytracing/ray.h"
+#include <openGL/drawable.h>
 
 class P_BVHNode;
 
-class PoissonBVH
+class PoissonBVH /*: public Drawable*/
 {
 public:
-    PoissonBVH(Mesh* m) { buildBVH(m); }
+    PoissonBVH(Mesh& m);
     ~PoissonBVH() {}
 
     P_BVHNode* root;
 
-    void buildBVH(Mesh* m);
+//    virtual void create();  // implemented for Drawable
 
+    void buildBVH(Mesh& m);
     bool intersect(Ray &ray, Intersection *isect, int* numIntersections);
 };
 

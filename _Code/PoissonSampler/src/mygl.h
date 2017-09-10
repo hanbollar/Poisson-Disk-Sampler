@@ -11,23 +11,16 @@
 #include <scene/camera.h>
 #include <scene/scene.h>
 #include <la.h>
-#include <scene/jsonreader.h>
-#include <integrators/integrator.h>
 
 #include <QTimer>
 #include <QTime>
 #include <QSound>
 
-class QOpenGLTexture;
+#include "samplers/poissonsampler.h"
+#include <QStringRef>
+#include <QFile>
 
-enum IntegratorType
-{
-    DIRECT_LIGHTING,
-    INDIRECT_LIGHTING,
-    FULL_LIGHTING,
-    NAIVE_LIGHTING,
-    PHOTON_LIGHTING
-};
+class QOpenGLTexture;
 
 class MyGL
     : public GLWidget277
@@ -45,20 +38,15 @@ private:
 
     Scene scene;
     Sampler* sampler;
-    int recursionLimit;
-    JSONReader json_reader;
-    IntegratorType integratorType;
 
     QString output_filepath;
-
-    QTimer render_event_timer;
 
     QSound completeSFX;
 
     QTime renderTimer;
 
-    bool makeBVH;
-    int maxBVHPrims;
+    PoissonSampler* poissonSampler;
+    Mesh* poissonMesh;
 
 public:
     explicit MyGL(QWidget *parent = 0);
@@ -68,14 +56,8 @@ public:
     void resizeGL(int w, int h);
     void paintGL();
 
-    void SceneLoadDialog();
     void GLDrawScene();
     void ResizeToSceneCamera();
-
-    void RenderScene();
-    void GLDrawProgressiveView();
-
-    void completeRender();
 
 private:
     QRubberBand *rubberBand;
@@ -88,7 +70,7 @@ private:
     QOpenGLShaderProgram prog_progressive;
     int prog_progressive_attribute_position;
     int prog_progressive_attribute_texcoord;
-    bool is_rendering = false;
+
     GLuint progressive_position_buffer;
     QOpenGLTexture* progressive_texture = nullptr;
 
@@ -101,17 +83,11 @@ protected:
 
 
 public slots:
-    void slot_SetNumSamplesSqrt(int);
-    void slot_SetRecursionLimit(int);
-    void slot_SetProgressiveRender(bool);
-    void slot_SetIntegratorType(int);
-    void slot_UseBVH(bool);
-    void slot_SetMaxBVHPrims(int);
+
+    void slot_poissonClicked();
+    void slot_loadPoissonObj();
 
 signals:
     void sig_ResizeToCamera(int,int);
     void sig_DisableGUI(bool);
-
-private slots:
-     void onRenderUpdate();
 };

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>610</height>
+    <width>651</width>
+    <height>747</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="groupBox_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -56,7 +56,7 @@
         <property name="title">
          <string>Controls</string>
         </property>
-        <widget class="QWidget" name="layoutWidget">
+        <widget class="QWidget" name="layoutWidget_3">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -65,132 +65,32 @@
            <height>91</height>
           </rect>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="label">
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Square root of pixel samples count:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="samplesSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_2">
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>Recursion limit:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QSpinBox" name="recursionSpinBox">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="5">
-           <widget class="QCheckBox" name="checkBox_Progressive">
-            <property name="text">
-             <string>Progressive Preview</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
+           <widget class="QPushButton" name="poisson">
             <property name="text">
-             <string>Integrator type:</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
+             <string>Poisson</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QComboBox" name="integratorSpinBox">
-            <item>
-             <property name="text">
-              <string>Naive</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Photon</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Direct Lighting</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Indirect Lighting</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Full Lighting</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <widget class="QCheckBox" name="checkBox_BVH">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="loadPoissonObj">
             <property name="text">
-             <string>Make BVH</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QSpinBox" name="spinBox_maxPrims">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>255</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Max primitives in node:</string>
+             <string>Load Poisson Obj</string>
             </property>
            </widget>
           </item>
@@ -207,16 +107,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>657</width>
-     <height>22</height>
+     <width>651</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionRender"/>
-    <addaction name="actionLoad_Scene"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -234,22 +132,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
-   </property>
-  </action>
-  <action name="actionLoad_Scene">
-   <property name="text">
-    <string>Load Scene</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+L</string>
-   </property>
-  </action>
-  <action name="actionRender">
-   <property name="text">
-    <string>Render</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="actionCamera_Controls">
@@ -274,6 +156,8 @@
     <slot>slot_SetIntegratorType(int)</slot>
     <slot>slot_UseBVH(bool)</slot>
     <slot>slot_SetMaxBVHPrims(int)</slot>
+    <slot>slot_poissonClicked()</slot>
+    <slot>slot_loadPoissonObj()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -296,70 +180,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>samplesSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>mygl</receiver>
-   <slot>slot_SetNumSamplesSqrt(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>265</x>
-     <y>533</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>268</x>
-     <y>410</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>recursionSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>mygl</receiver>
-   <slot>slot_SetRecursionLimit(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>482</x>
-     <y>533</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>488</x>
-     <y>430</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_Progressive</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mygl</receiver>
-   <slot>slot_SetProgressiveRender(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>631</x>
-     <y>532</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>319</x>
-     <y>247</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>integratorSpinBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>mygl</receiver>
-   <slot>slot_SetIntegratorType(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>249</x>
-     <y>565</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>246</x>
-     <y>408</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>mygl</sender>
    <signal>sig_DisableGUI(bool)</signal>
    <receiver>MainWindow</receiver>
@@ -376,34 +196,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>checkBox_BVH</sender>
-   <signal>toggled(bool)</signal>
+   <sender>poisson</sender>
+   <signal>clicked()</signal>
    <receiver>mygl</receiver>
-   <slot>slot_UseBVH(bool)</slot>
+   <slot>slot_poissonClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>626</x>
-     <y>563</y>
+     <x>171</x>
+     <y>511</y>
     </hint>
     <hint type="destinationlabel">
-     <x>604</x>
-     <y>428</y>
+     <x>318</x>
+     <y>251</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_maxPrims</sender>
-   <signal>valueChanged(int)</signal>
+   <sender>loadPoissonObj</sender>
+   <signal>clicked()</signal>
    <receiver>mygl</receiver>
-   <slot>slot_SetMaxBVHPrims(int)</slot>
+   <slot>slot_loadPoissonObj()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>434</x>
-     <y>571</y>
+     <x>171</x>
+     <y>511</y>
     </hint>
     <hint type="destinationlabel">
-     <x>409</x>
-     <y>443</y>
+     <x>318</x>
+     <y>251</y>
     </hint>
    </hints>
   </connection>

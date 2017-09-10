@@ -44,6 +44,10 @@ Triangle::Triangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3
     uvs[2] = t3;
 }
 
+void Triangle::create() {
+    // actually handled in mesh's create?
+}
+
 float TriArea(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3)
 {
     return glm::length(glm::cross(p1 - p2, p3 - p2)) * 0.5f;

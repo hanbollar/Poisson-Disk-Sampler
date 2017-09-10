@@ -4,23 +4,9 @@ Intersection::Intersection():
     point(Point3f(0)),
     normalGeometric(Normal3f(0)),
     uv(Point2f(0)),
-//    t(-1),
-    t(INFINITY), // change made for 700 proj
-    objectHit(nullptr),
-    bsdf(nullptr),
+    t(INFINITY),
     tangent(0.f), bitangent(0.f)
 {}
-
-bool Intersection::ProduceBSDF()
-{
-    return objectHit->ProduceBSDF(this);
-}
-
-Color3f Intersection::Le(const Vector3f &wo) const
-{
-    const AreaLight* light = objectHit->GetAreaLight();
-    return light ? light->L(*this, wo) : Color3f(0.f);
-}
 
 Ray Intersection::SpawnRay(const Vector3f &d) const
 {

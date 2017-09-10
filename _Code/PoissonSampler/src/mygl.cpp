@@ -8,14 +8,15 @@
 #include <QFileDialog>
 #include <QThreadPool>
 #include <QOpenGLTexture>
-#include <integrators/directlightingintegrator.h>
-#include <integrators/naiveintegrator.h>
-#include <integrators/fulllightingintegrator.h>
-#include <scene/lights/diffusearealight.h>
+
+
 #include <QDateTime>
 
-#include <integrators/photonIntegrator.h>
-#include <scene/photonmap.h>
+#include "samplers/poissonsampler.h"
+
+#include <openGL/drawable.h>
+
+#include <vector>
 
 constexpr float screen_quad_pos[] = {
     1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
@@ -27,22 +28,19 @@ constexpr float screen_quad_pos[] = {
 MyGL::MyGL(QWidget *parent)
     : GLWidget277(parent),
       sampler(new Sampler(100, 0)),
-      integratorType(NAIVE_LIGHTING),
-      recursionLimit(5),
       completeSFX(":/include/complete.wav")
 {
     setFocusPolicy(Qt::ClickFocus);
-    render_event_timer.setParent(this);
-    connect(&render_event_timer, SIGNAL(timeout()), this, SLOT(onRenderUpdate()));
     move_rubberband = false;
     rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
     rubberBand->setGeometry(0,0,0,0);
     rubberBand->show();
     origin = QPoint(0, 0);
     rubberband_offset = QPoint(0, 0);
-    something_rendered = false;
-    makeBVH = true;
-    maxBVHPrims = 1;
+
+    //-------------------------------------------
+    poissonSampler = nullptr;
+    poissonMesh = nullptr;
 }
 
 void MyGL::mousePressEvent(QMouseEvent *e)
@@ -164,54 +162,74 @@ void MyGL::resizeGL(int w, int h)
 // For example, when the function updateGL is called, paintGL is called implicitly.
 void MyGL::paintGL()
 {
-    if (progressive_render && (is_rendering || something_rendered))
-    {
-        glClear(GL_DEPTH_BUFFER_BIT);
-        GLDrawProgressiveView();
-    }
-    else
-    {    // Clear the screen so that we only see newly drawn images
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Clear the screen so that we only see newly drawn images
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Update the viewproj matrix
-        prog_lambert.setViewProjMatrix(gl_camera.GetViewProj());
-        prog_flat.setViewProjMatrix(gl_camera.GetViewProj());
-        GLDrawScene();
-    }
+    // Update the viewproj matrix
+    prog_lambert.setViewProjMatrix(gl_camera.GetViewProj());
+    prog_flat.setViewProjMatrix(gl_camera.GetViewProj());
+    GLDrawScene();
 }
 
 void MyGL::GLDrawScene()
 {
-    for(std::shared_ptr<Drawable> d : scene.drawables)
-    {
-        if(d->drawMode() == GL_TRIANGLES)
-        {
-//            if(g->areaLight != nullptr)
-//            {
-//                prog_flat.setModelMatrix(g->shape->transform.T());
-//                prog_flat.draw(*this, *g->shape);
-//            }
-//            else
-//            {
-                prog_lambert.setModelMatrix(d->transform.T());
-                prog_lambert.draw(*this, *d);
-//            }
-        }
-        else if(d->drawMode() == GL_LINES)
-        {
-            prog_flat.setModelMatrix(d->transform.T());
-            prog_flat.draw(*this, *d);
-        }
-    }
-//    for(std::shared_ptr<Light> l : scene.lights)
+//    for(std::shared_ptr<Drawable> d : scene.drawables)
 //    {
-//        DiffuseAreaLight* dal = dynamic_cast<DiffuseAreaLight*>(l.get());
-//        if(dal != nullptr)
+//        if (poissonSampler != nullptr) {
+//            std::cout<<"in GLDrawScene: poissonSampler is not nullptr"<<std::endl;
+
+//            prog_lambert.setModelMatrix(glm::mat4(1.0f));
+
+//            Drawable* pSampler_drawable = dynamic_cast<Drawable*>(poissonSampler);
+
+
+
+//            prog_lambert.draw(*this, *pSampler_drawable);
+
+
+//        } /*else if (poissonMesh != nullptr) {
+//            std::cout<<"in GLDrawScene: poissonMesh is not nullptr"<<std::endl;
+
+//            prog_lambert.setModelMatrix(glm::mat4(1.0f));
+//            prog_lambert.draw(*this, *poissonMesh);
+//        }*/
+
+//        if(d->drawMode() == GL_TRIANGLES)
 //        {
-//            prog_flat.setModelMatrix(dal->shape->transform.T());
-//            prog_flat.draw(*this, *dal->shape);
+////            if(g->areaLight != nullptr)
+////            {
+////                prog_flat.setModelMatrix(g->shape->transform.T());
+////                prog_flat.draw(*this, *g->shape);
+////            }
+////            else
+////            {
+
+
+//            // only draw poissonMesh if sampler is nullptr
+//            if ((poissonSampler != nullptr) && &(*d.get()) != &(*poissonMesh)) {
+//               prog_lambert.setModelMatrix(d->transform.T());
+//                prog_lambert.draw(*this, *d);
+//            } else if (poissonSampler == nullptr) {
+//                prog_lambert.setModelMatrix(d->transform.T());
+//                prog_lambert.draw(*this, *d);
+//            }
+
+
+////            }
 //        }
+//        else if(d->drawMode() == GL_LINES)
+//        {
+//            prog_flat.setModelMatrix(d->transform.T());
+//            prog_flat.draw(*this, *d);
+//        } else if (d->drawMode() == GL_POINTS) {
+//            prog_flat.setModelMatrix(d->transform.T());
+//            prog_flat.draw(*this, *d);
+//        }
+
+
+
 //    }
+
     prog_flat.setModelMatrix(glm::mat4(1.0f));
     prog_flat.draw(*this, scene.camera);
 }
@@ -283,275 +301,71 @@ void MyGL::keyPressEvent(QKeyEvent *e)
 
     if (!invalid_key)
     {
-        something_rendered = false;
         gl_camera.RecomputeAttributes();
-
-
-        if(!is_rendering)
-        {
-            // If we moved the camera and we're not currently rendering,
-            // then clean the pixels of our film.
-            scene.film.cleanPixels();
-        }
 
         update();  // Calls paintGL, among other things
     }
 }
 
-void MyGL::onRenderUpdate()
-{
-    if (!is_rendering)
-        return;
+void MyGL::slot_poissonClicked() {
+    std::cout<<"starting poisson"<<std::endl;
 
-    update();
+    std::cout<<"NEED TO REWRITE SLOT POISSON CLICKED BECAUSE SCENE.DRAWABLES DOES NOT EXIST ATM"<<std::endl;
+//    if (this->scene.drawables.size() > 0) {
+//        // create poisson on this
 
-    if (QThreadPool::globalInstance()->activeThreadCount() > 0)
-    {
-        return;
-    }
+//        bool threeDim = true;
 
-    if (QThreadPool::globalInstance()->waitForDone())
-    {
-        completeRender();
-    }
+//        poissonSampler = new PoissonSampler(*poissonMesh, scene, threeDim);
+
+////        Drawable* draw =
+////        Drawable draw_poisson = *draw;
+////        auto poisson_draw = std::make_shared<Mesh>();
+////        *(scene.drawables).append(/*dynamic_cast<Drawable*>(poissonSampler)*/ (poisson_draw));
+//    }
+
+    std::cout<<"poisson finished being created"<<std::endl;
 }
 
-void MyGL::SceneLoadDialog()
-{
-    something_rendered = false;
+void MyGL::slot_loadPoissonObj() {
+    std::cout<<"loading poisson obj"<<std::endl;
 
-    QString filepath = QFileDialog::getOpenFileName(0, QString("Load Scene"), QString("../scene_files"), tr("*.json"));
-    if(filepath.length() == 0)
-    {
-        return;
-    }
+//    QString filepath = QFileDialog::getOpenFileName(0, QString("Load Obj"), QString("../scene_files"), tr("*.obj"));
+//    std::cout<<"filepath:"<<filepath.toStdString()<<std::endl;
 
-    QFile file(filepath);
-    int i = filepath.length() - 1;
-    while(QString::compare(filepath.at(i), QChar('/')) != 0)
-    {
-        i--;
-    }
-    QStringRef local_path = filepath.leftRef(i+1);
-    //Reset all of our objects
-    scene.Clear();
-    //Load new objects based on the JSON file chosen.
+//    if(filepath.length() == 0)
+//    {
+//        return;
+//    }
 
-    json_reader.LoadSceneFromFile(file, local_path, scene);
-    gl_camera.CopyAttributes(scene.camera);
-    ResizeToSceneCamera();
-}
+//    QFile file(filepath);
+//    int i = filepath.length() - 1;
+//    while(QString::compare(filepath.at(i), QChar('/')) != 0)
+//    {
+//        i--;
+//    }
+//    QStringRef local_path = filepath.leftRef(i+1);
+////    std::cout<<"local_path:"<<local_path.toString().toStdString()<<std::endl;
+//    QStringRef file_name = filepath.rightRef(filepath.length() - 1 - (i));
+////    std::cout<<"file name:"<<file_name.toString().toStdString()<<std::endl;
 
-void MyGL::RenderScene()
-{
-    if (is_rendering) {return;}
+////    QFileInfo fileInfo(filepath.fileName());
+////    QStringRef filename(&(fileInfo.fileName()));
 
-    // added so scene doesnt load as black
-    if(makeBVH && !scene.bvh)
-   {
-       scene.bvh = new BVHAccel(scene.primitives.toVector().toStdVector(), maxBVHPrims);
-   }
-   else if(makeBVH && scene.bvh)
-   {
-       scene.clearBVH();
-       scene.bvh = new BVHAccel(scene.primitives.toVector().toStdVector(), maxBVHPrims);
-   }
-   else if(!makeBVH && scene.bvh)
-   {
-       scene.clearBVH();
-   }
+////    QString str = QString("");
+////    QStringRef filename(&str);
 
-    output_filepath = QFileDialog::getSaveFileName(0, QString("Save Image"), QString("../rendered_images"), tr("*.png"));
-    if(output_filepath.length() == 0)
-    {
-        return;
-    }
-    // recreate progressive rendering texture
-    if (progressive_texture)
-    {
-        progressive_texture->destroy();
-        delete progressive_texture;
-        progressive_texture = nullptr;
-    }
-    progressive_texture = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    progressive_texture->setSize(scene.film.bounds.Diagonal().x, scene.film.bounds.Diagonal().y);
-    progressive_texture->setFormat(QOpenGLTexture::TextureFormat::RGBA32F);
-    progressive_texture->allocateStorage();
-    // Get the bounds of the camera portion we are going to render
-    // Ask the film for its bounds
-    Bounds2i renderBounds = scene.film.bounds;
-    // Change bounds to selected screen area if appropriate
-    if(origin != rubberband_offset)
-    {
-        renderBounds = Bounds2i(Point2i(origin.x(), origin.y()), Point2i(rubberband_offset.x(), rubberband_offset.y()));
-    }
-    // Get the XY lengths of the film
-    Vector2i renderExtent = renderBounds.Diagonal();
-    // Compute the number of tiles needed in X and Y based on tileSize and width or height
-    const int tileSize = 16;
-    Point2i nTiles((renderExtent.x + tileSize - 1) / tileSize,
-                   (renderExtent.y + tileSize - 1) / tileSize);
+//    Transform t = Transform();
+//    poissonMesh = new Mesh();
+//    poissonMesh->LoadOBJ(file_name, local_path, t);
 
-    renderTimer.restart();
+    std::cout<<"NEED TO REWRITE SLOT_LOAD POISSON OBJ SINCE SCENE NO LONGER HAS DRAWABLES"<<std::endl;
 
-    float nphotons = 50;
-    int vradius = 1;
-    PhotonMap* photMap = new PhotonMap(nphotons, vradius, &scene, sampler->Clone(nphotons), recursionLimit);
+//    if (scene.drawables.length() > 0) {
+//         if (dynamic_cast<Mesh*>(scene.drawables[0].get()) != nullptr) { // first obj is a mesh
+//             poissonMesh = (Mesh*)(scene.drawables[0].get());
+//         }
+//    }
 
-    // For every tile, begin a render task:
-    for(int X = 0; X < nTiles.x; X++)
-    {
-        for(int Y = 0; Y < nTiles.y; Y++)
-        {
-            int x0 = renderBounds.Min().x + X * tileSize;
-            int x1 = std::min(x0 + tileSize, renderBounds.Max().x);
-            int y0 = renderBounds.Min().y + Y * tileSize;
-            int y1 = std::min(y0 + tileSize, renderBounds.Max().y);
-            Bounds2i tileBounds(Point2i(x0, y0), Point2i(x1, y1));
-            // Create a seed unique to the tile: pos.y * numberOfXTiles + pos.x
-            int seed = y0 * nTiles.x + x0;
-
-            Integrator* rt = nullptr;
-            switch(integratorType)
-            {
-            case DIRECT_LIGHTING:
-                rt = new DirectLightingIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit);
-                break;
-            case INDIRECT_LIGHTING:
-                //TODO later
-                break;
-            case FULL_LIGHTING:
-                rt = new FullLightingIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit);
-                break;
-            case NAIVE_LIGHTING:
-                rt = new NaiveIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit);
-                break;
-            case PHOTON_LIGHTING:
-                DirectLightingIntegrator* dir = new DirectLightingIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit);
-                rt = new PhotonIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit, photMap, dir);
-                break;
-            }
-#define MULTITHREAD // Comment this line out to be able to debug with breakpoints.
-#ifdef MULTITHREAD
-            QThreadPool::globalInstance()->start(rt);
-#else
-            // Use this commented-out code to only render a tile with your desired pixel
-            //            Point2i debugPixel(200,200);
-            //            if(x0 < debugPixel.x && x1 >= debugPixel.x && y0 < debugPixel.y && y1 >= debugPixel.y)
-            //            {
-            //                rt->Render();
-            //            }
-            rt->Render();
-            delete rt;
-#endif //MULTITHREAD
-        }
-    }
-    render_event_timer.start(500);
-    is_rendering = true;
-    something_rendered = true;
-    emit sig_DisableGUI(true);
-}
-
-void MyGL::GLDrawProgressiveView()
-{
-    // if rendering, draw progressive rendering scene;
-    prog_progressive.bind();
-
-    Vector2i dims = scene.film.bounds.Diagonal();
-    std::vector<glm::vec4> texdata(dims.x * dims.y);
-
-    for (unsigned int x = 0; x < dims.x; x++)
-    {
-        for (unsigned int y = 0; y < dims.y; y++)
-        {
-            if (scene.film.IsPixelColorSet(Point2i(x, y)))
-            {
-                texdata[x + y * dims.x] = glm::vec4(scene.film.GetColor(Point2i(x, y)), 1.0f);
-            }
-            else
-            {
-                texdata[x + y * dims.x] = glm::vec4(0.0f);
-            }
-        }
-    }
-
-    progressive_texture->setData(QOpenGLTexture::PixelFormat::RGBA, QOpenGLTexture::PixelType::Float32, texdata.data());
-    progressive_texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-    progressive_texture->setMagnificationFilter(QOpenGLTexture::Linear);
-
-    // the initial texture is from the opengl frame buffer before start rendering
-    progressive_texture->bind();
-
-    glBindBuffer(GL_ARRAY_BUFFER, progressive_position_buffer);
-
-    prog_progressive.enableAttributeArray(prog_progressive_attribute_position);
-    glVertexAttribPointer(prog_progressive_attribute_position, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), 0);
-    prog_progressive.enableAttributeArray(prog_progressive_attribute_texcoord);
-    glVertexAttribPointer(prog_progressive_attribute_texcoord, 2, GL_FLOAT, GL_TRUE, 5*sizeof(GLfloat), (const GLvoid*)(3 * sizeof(GLfloat)));
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable( GL_BLEND );
-
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-    glDisable(GL_BLEND);
-    progressive_texture->release();
-}
-
-void MyGL::completeRender()
-{
-    std::cout << "Milliseconds to render: " << renderTimer.elapsed() << std::endl;
-    is_rendering = false;
-    something_rendered = true;
-    render_event_timer.stop();
-    scene.film.WriteImage(output_filepath);
-    completeSFX.play();
-    emit sig_DisableGUI(false);
-}
-
-void MyGL::slot_SetNumSamplesSqrt(int i)
-{
-    sampler->samplesPerPixel = i * i;
-}
-
-void MyGL::slot_SetRecursionLimit(int n)
-{
-    recursionLimit = n;
-}
-
-void MyGL::slot_SetProgressiveRender(bool b)
-{
-    progressive_render = b;
-}
-
-void MyGL::slot_SetIntegratorType(int t)
-{
-    switch(t)
-    {
-    case 0:
-        integratorType = NAIVE_LIGHTING;
-        break;
-    case 1:
-        integratorType = PHOTON_LIGHTING;
-        break;
-    case 2:
-        integratorType = DIRECT_LIGHTING;
-        break;
-    case 3:
-        integratorType = INDIRECT_LIGHTING;
-        break;
-    case 4:
-        integratorType = FULL_LIGHTING;
-        break;
-    }
-}
-
-void MyGL::slot_UseBVH(bool b)
-{
-    makeBVH = b;
-}
-
-void MyGL::slot_SetMaxBVHPrims(int i)
-{
-    maxBVHPrims = i;
+    std::cout<<"end: loading poisson obj"<<std::endl;
 }

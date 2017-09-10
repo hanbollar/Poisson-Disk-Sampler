@@ -3,7 +3,6 @@
 #include "scene/geometry/mesh.h"
 #include "raytracing/ray.h"
 #include "globals.h"
-#include "scene/bvh.h"
 #include <iostream>
 
 #include "eigen/Eigen/Dense"
@@ -12,12 +11,12 @@
 
 class Sample;
 
-class PoissonSampler
+class PoissonSampler : public Drawable
 {
 public:
     //assuming only inputting primitives in scene that ALL need to be filled
-    PoissonSampler(Mesh* mesh, Scene* scene, bool isThreeDim)
-        : m(mesh), s(scene), bvh(nullptr), /*b(s->bvh), */ bbox(nullptr),
+    PoissonSampler(Mesh& mesh, Scene& scene, bool isThreeDim)
+        : m(mesh), s(scene), bvh(nullptr), bbox(nullptr),
             threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)) {
 
         initializeBackgroundGridsandBVH();
@@ -25,9 +24,8 @@ public:
     ~PoissonSampler() { backgroundGrid3D.clear(); backgroundGrid2D.clear(); }
 
     // all variables below are initialized in the constructor's list
-    Mesh* m;
-    Scene* s;
-//    BVHAccel* b;
+    Mesh m;
+    Scene s;
     Bounds3f* bbox;
     bool threeDim;
     glm::vec3 voxelDim;
@@ -44,6 +42,11 @@ public:
 
     glm::vec3 posToGridLoc(glm::vec3 p);
     bool validLocWithinObj(glm::vec3 p);
+
+    glm::vec3 randomLocAround(glm::vec3 pos);
+
+    GLenum drawMode();
+    void create();
 };
 
 class Sample {

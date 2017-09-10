@@ -15,45 +15,12 @@ SOURCES += \
     $$PWD/raytracing/ray.cpp \
     $$PWD/scene/transform.cpp \
     $$PWD/tinyobj/tiny_obj_loader.cc \
-    $$PWD/raytracing/film.cpp \
     $$PWD/cameracontrolshelp.cpp \
-    $$PWD/scene/jsonreader.cpp \
-    $$PWD/scene/materials/mattematerial.cpp \
-    $$PWD/scene/materials/bsdf.cpp \
-    $$PWD/integrators/directlightingintegrator.cpp \
-    $$PWD/scene/geometry/sphere.cpp \
-    $$PWD/scene/geometry/glshapecreation.cpp \
-    $$PWD/integrators/integrator.cpp \
-    $$PWD/scene/geometry/squareplane.cpp \
     $$PWD/samplers/sampler.cpp \
     $$PWD/scene/geometry/shape.cpp \
-    $$PWD/scene/geometry/cube.cpp \
-    $$PWD/scene/geometry/disc.cpp \
     $$PWD/scene/geometry/mesh.cpp \
     $$PWD/warpfunctions.cpp \
-    $$PWD/scene/materials/lambertbrdf.cpp \
-    $$PWD/scene/geometry/primitive.cpp \
-    $$PWD/scene/lights/light.cpp \
-    $$PWD/scene/lights/diffusearealight.cpp \
-    $$PWD/integrators/naiveintegrator.cpp \
-    $$PWD/scene/materials/mirrormaterial.cpp \
-    $$PWD/scene/materials/specularbrdf.cpp \
-    $$PWD/scene/materials/fresnel.cpp \
-    $$PWD/scene/materials/glassmaterial.cpp \
-    $$PWD/scene/materials/transmissivematerial.cpp \
-    $$PWD/scene/materials/specularbtdf.cpp \
-    $$PWD/integrators/fulllightingintegrator.cpp \
-    $$PWD/scene/materials/microfacet.cpp \
-    $$PWD/scene/materials/microfacetbrdf.cpp \
-    $$PWD/scene/materials/plasticmaterial.cpp \
     $$PWD/scene/bounds.cpp \
-    $$PWD/scene/bvh.cpp \
-    $$PWD/scene/lenscamera.cpp \
-    $$PWD/scene/lights/pointlight.cpp \
-    $$PWD/scene/lights/spotlight.cpp \
-    $$PWD/scene/geometry/ignoreGeoLight.cpp \
-    $$PWD/scene/photonmap.cpp \
-    $$PWD/integrators/photonIntegrator.cpp \
     $$PWD/samplers/poissonsampler.cpp \
     $$PWD/samplers/poissonbvh.cpp
 
@@ -71,45 +38,12 @@ HEADERS += \
     $$PWD/raytracing/ray.h \
     $$PWD/scene/transform.h \
     $$PWD/tinyobj/tiny_obj_loader.h \
-    $$PWD/scene/materials/material.h \
-    $$PWD/raytracing/film.h \
     $$PWD/cameracontrolshelp.h \
-    $$PWD/scene/jsonreader.h \
-    $$PWD/integrators/integrator.h \
     $$PWD/globals.h \
     $$PWD/samplers/sampler.h \
     $$PWD/scene/geometry/shape.h \
-    $$PWD/scene/geometry/primitive.h \
-    $$PWD/scene/materials/mattematerial.h \
-    $$PWD/scene/materials/bsdf.h \
-    $$PWD/integrators/directlightingintegrator.h \
-    $$PWD/scene/geometry/sphere.h \
-    $$PWD/scene/geometry/squareplane.h \
-    $$PWD/scene/geometry/cube.h \
     $$PWD/scene/geometry/mesh.h \
-    $$PWD/scene/geometry/disc.h \
-    $$PWD/scene/materials/lambertbrdf.h \
-    $$PWD/scene/lights/light.h \
-    $$PWD/scene/lights/diffusearealight.h \
-    $$PWD/integrators/naiveintegrator.h \
-    $$PWD/scene/materials/mirrormaterial.h \
-    $$PWD/scene/materials/specularbrdf.h \
-    $$PWD/scene/materials/fresnel.h \
-    $$PWD/scene/materials/glassmaterial.h \
-    $$PWD/scene/materials/transmissivematerial.h \
-    $$PWD/scene/materials/specularbtdf.h \
-    $$PWD/integrators/fulllightingintegrator.h \
-    $$PWD/scene/materials/microfacet.h \
-    $$PWD/scene/materials/microfacetbrdf.h \
-    $$PWD/scene/materials/plasticmaterial.h \
     $$PWD/scene/bounds.h \
-    $$PWD/scene/bvh.h \
     $$PWD/warpfunctions.h \
-    $$PWD/scene/lenscamera.h \
-    $$PWD/scene/lights/pointlight.h \
-    $$PWD/scene/lights/spotlight.h \
-    $$PWD/scene/geometry/ignoreGeoLight.h \
-    $$PWD/scene/photonmap.h \
-    $$PWD/integrators/photonIntegrator.h \
     $$PWD/samplers/poissonsampler.h \
     $$PWD/samplers/poissonbvh.h

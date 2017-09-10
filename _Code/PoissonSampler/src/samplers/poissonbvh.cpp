@@ -1,16 +1,113 @@
 #include "poissonsampler.h"
 
+PoissonBVH::PoissonBVH(Mesh& m) : root(new P_BVHNode()) {
+    buildBVH(m);
+}
+
+//void PoissonBVH::create() {
+//    //create new vbo
+//       //set drawmode to GL_Line
+//       //should interpolate from one vertex col value to other
+//       //only need to put in starting vertex and ending vertex so ya
+
+//       //  line indices. first in line is prevVert, second in line is currentVert
+//       std::vector<GLuint> lineIndices;
+//       //  pos vec4s
+//       std::vector<glm::vec4> posVector;
+//       //  color vec4s
+//       std::vector<glm::vec4> colVector;
+//       //note: pos, and color vectors need to be 1:1 to eachother
+
+//       HalfEdge* curr = currentEdge;
+//       Vertex* currVert = curr->vert;
+//       //to find the prevVert
+//       bool first = true;
+//       while (first || curr->next != currentEdge) {
+//           first = false;
+//           curr = curr->next;
+//       }
+//       Vertex* prevVert = curr->vert;
+
+//       glm::vec4 currVertPos = glm::vec4(currVert->pos[0], currVert->pos[1], currVert->pos[2], 1.0f);
+//       glm::vec4 prevVertPos = glm::vec4(prevVert->pos[0], prevVert->pos[1], prevVert->pos[2], 1.0f);
+
+//       lineIndices.push_back(0);
+//       lineIndices.push_back(1);
+//       posVector.push_back(prevVertPos);
+//       posVector.push_back(currVertPos);
+
+//       colVector.push_back(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+//       colVector.push_back(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+//       count = lineIndices.size();
+
+//       //  handling line indices vbo
+//       generateIdx();
+//       context->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufIdx);
+//       context->glBufferData(GL_ELEMENT_ARRAY_BUFFER, lineIndices.size() * sizeof(GLuint), lineIndices.data(), GL_STATIC_DRAW);
+
+//       //  handling of pos vec3s vbo
+//       generatePos();
+//       context->glBindBuffer(GL_ARRAY_BUFFER, bufPos);
+//       context->glBufferData(GL_ARRAY_BUFFER, posVector.size() * sizeof(glm::vec4), posVector.data(), GL_STATIC_DRAW);
+
+//       //  handling of color vbo
+//       generateCol();
+//       context->glBindBuffer(GL_ARRAY_BUFFER, bufCol);
+//       context->glBufferData(GL_ARRAY_BUFFER, colVector.size() * sizeof(glm::vec4), colVector.data(), GL_STATIC_DRAW);
+
+////    glDrawArrays to use GL_LINES instead of GL_TRIANGLES
+////    GLuint cub_idx[CUB_IDX_COUNT];
+////    glm::vec3 cub_vert_pos[CUB_VERT_COUNT];
+////    glm::vec3 cub_vert_nor[CUB_VERT_COUNT];
+////    glm::vec3 cub_vert_col[CUB_VERT_COUNT];
+
+////    createCubeVertexPositions(cub_vert_pos);
+////    createCubeVertexNormals(cub_vert_nor);
+////    createCubeIndices(cub_idx);
+
+
+////    Color3f color(colorRNG.nextFloat(), colorRNG.nextFloat(), colorRNG.nextFloat());
+
+////    for(int i = 0; i < CUB_VERT_COUNT; i++){
+////        cub_vert_col[i] = color;
+////    }
+
+////    count = CUB_IDX_COUNT;
+
+//    bufIdx.create();
+//    bufIdx.bind();
+//    bufIdx.setUsagePattern(QOpenGLBuffer::StaticDraw);
+//    bufIdx.allocate(cub_idx, CUB_IDX_COUNT * sizeof(GLuint));
+
+//    bufPos.create();
+//    bufPos.bind();
+//    bufPos.setUsagePattern(QOpenGLBuffer::StaticDraw);
+//    bufPos.allocate(cub_vert_pos,CUB_VERT_COUNT * sizeof(glm::vec3));
+
+//    bufNor.create();
+//    bufNor.bind();
+//    bufNor.setUsagePattern(QOpenGLBuffer::StaticDraw);
+//    bufNor.allocate(cub_vert_nor, CUB_VERT_COUNT * sizeof(glm::vec3));
+
+//    bufCol.create();
+//    bufCol.bind();
+//    bufCol.setUsagePattern(QOpenGLBuffer::StaticDraw);
+//    bufCol.allocate(cub_vert_col, CUB_VERT_COUNT * sizeof(glm::vec3));
+
+//}
+
 /**
  * @brief PoissonBVH::buildBVH
  * @param m - mesh from which the BVH will be built
  */
-void PoissonBVH::buildBVH(Mesh* m){
-    int minNumOfTris = 15;
+void PoissonBVH::buildBVH(Mesh& m){
+    int minNumOfTris = 20;
 
-    root->bbox = root->buildBoundingBox(m->faces);
+//    root->bbox = root->buildBoundingBox(m.faces);
 
     // building the whole tree
-    root->buildSelfAsChild(m->faces, minNumOfTris);
+    root->buildSelfAsChild(m.faces, minNumOfTris);
 }
 
 /**
@@ -26,6 +123,8 @@ void P_BVHNode::buildSelfAsChild(QList<std::shared_ptr<Triangle>>& t, int minNum
     // use surface area heuristic to determine which should be in left and which should be in right
     // build left and right children
     // done
+
+    this->bbox = this->buildBoundingBox(t);
 
     // base case
     if (t.length() < minNum) {
@@ -55,6 +154,9 @@ void P_BVHNode::buildSelfAsChild(QList<std::shared_ptr<Triangle>>& t, int minNum
 
     if (leftList->length() == 0 || rightList->length() == 0) { std::cout<<"error in P_BVHNode buildSelfASChild, lists not filled in correctly in splitTheTris"<<std::endl; throw; }
 
+    this->l = new P_BVHNode();
+    this->r = new P_BVHNode();
+
     this->l->buildSelfAsChild(*leftList, minNum);
     this->r->buildSelfAsChild(*rightList, minNum);
 }
@@ -71,7 +173,7 @@ Bounds3f* P_BVHNode::buildBoundingBox(QList<std::shared_ptr<Triangle>>& t) {
 
         for (int i=0; i<3; i++) {
             minOfTri[i] = glm::min(tri->points[0][i], glm::min(tri->points[1][i], tri->points[2][i]));
-            maxOfTri[i] = glm::min(tri->points[0][i], glm::min(tri->points[1][i], tri->points[2][i]));
+            maxOfTri[i] = glm::max(tri->points[0][i], glm::max(tri->points[1][i], tri->points[2][i]));
         }
 
         const Bounds3f b = Bounds3f(minOfTri, maxOfTri);
@@ -105,9 +207,11 @@ void P_BVHNode::splitTheTris(int axis, QList<std::shared_ptr<Triangle>> &t,
     }
 
     // setting up vars for all looping iterations
-    float stepSize = glm::vec3((max-min)/(10.0f))[axis];
+    float stepSize = glm::vec3((max-min)/(50.0f))[axis];
     float loc = min[axis] + stepSize;
     float minSAH = std::numeric_limits<float>::max();
+
+    bool neverSplit = true;
 
     // looping through vars at diff test locations
     while (loc < max[axis]) {
@@ -141,6 +245,8 @@ void P_BVHNode::splitTheTris(int axis, QList<std::shared_ptr<Triangle>> &t,
         float SAdiff = glm::abs(rightSA * rightCount + leftSA * leftCount) / outerSA;
 
         if (SAdiff < minSAH) {
+            neverSplit = false;
+
             minSAH = SAdiff;
             left->clear();
             right->clear();
@@ -154,6 +260,11 @@ void P_BVHNode::splitTheTris(int axis, QList<std::shared_ptr<Triangle>> &t,
         loc += stepSize;
 
     } //end: while (loc < max[axis]);
+
+    if (neverSplit) {
+        std::cout<<std::endl;
+    }
+
 
     for (int i=0; i<3; i++) {
         if (leftBox->min[i] > leftBox->max[i])
