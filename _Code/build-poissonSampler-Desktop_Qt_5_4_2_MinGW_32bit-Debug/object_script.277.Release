@@ -13,12 +13,12 @@ INPUT(
 ./release\tiny_obj_loader.o
 ./release\cameracontrolshelp.o
 ./release\sampler.o
-./release\shape.o
 ./release\mesh.o
 ./release\warpfunctions.o
 ./release\bounds.o
 ./release\poissonsampler.o
 ./release\poissonbvh.o
+./release\film.o
 ./release\qrc_glsl.o
 ./release\qrc_sfx.o
 ./release\moc_mainwindow.o

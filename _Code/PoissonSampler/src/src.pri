@@ -17,12 +17,12 @@ SOURCES += \
     $$PWD/tinyobj/tiny_obj_loader.cc \
     $$PWD/cameracontrolshelp.cpp \
     $$PWD/samplers/sampler.cpp \
-    $$PWD/scene/geometry/shape.cpp \
     $$PWD/scene/geometry/mesh.cpp \
     $$PWD/warpfunctions.cpp \
     $$PWD/scene/bounds.cpp \
     $$PWD/samplers/poissonsampler.cpp \
-    $$PWD/samplers/poissonbvh.cpp
+    $$PWD/samplers/poissonbvh.cpp \
+    $$PWD/raytracing/film.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -41,9 +41,9 @@ HEADERS += \
     $$PWD/cameracontrolshelp.h \
     $$PWD/globals.h \
     $$PWD/samplers/sampler.h \
-    $$PWD/scene/geometry/shape.h \
     $$PWD/scene/geometry/mesh.h \
     $$PWD/scene/bounds.h \
     $$PWD/warpfunctions.h \
     $$PWD/samplers/poissonsampler.h \
-    $$PWD/samplers/poissonbvh.h
+    $$PWD/samplers/poissonbvh.h \
+    $$PWD/raytracing/film.h

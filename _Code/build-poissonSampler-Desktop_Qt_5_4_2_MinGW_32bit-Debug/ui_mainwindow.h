@@ -145,7 +145,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Path Tracer", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Poisson Sampler", 0));
         actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0));
         actionQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", 0));
         actionCamera_Controls->setText(QApplication::translate("MainWindow", "Camera Controls", 0));

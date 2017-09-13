@@ -1,5 +1,13 @@
 #include "poissonsampler.h"
 
+PoissonSampler::PoissonSampler(Mesh &mesh, Scene &scene, bool isThreeDim)
+    : m(mesh), s(scene), bvh(nullptr), bbox(nullptr),
+        threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)) {
+
+    initializeBackgroundGridsandBVH();
+    poissonAlg();
+}
+
 GLenum PoissonSampler::drawMode() {
     return GL_POINTS;
 }
@@ -50,7 +58,6 @@ void PoissonSampler::create() {
     glm::vec3 points_vert_nor[numPoints];
     glm::vec3 points_vert_col[numPoints];
 
-
     glm::vec3 color1 = glm::vec3(0.0f, 75.0f, 150.0f) / 255.0f; //white
     glm::vec3 color2 = glm::vec3(200.0f, 230.0f, 255.0f) / 255.0f; //yellow
     for (int p = 0; numPoints!=0 && p<numPoints; p++) {
@@ -87,24 +94,32 @@ void PoissonSampler::create() {
 }
 
 void PoissonSampler::poissonAlg(){
+    std::cout<<"poissonSampler::poissonAlg"<<std::endl;
+
     // set up pointer list of valid samples
     std::vector<Sample*> activeValidSamples(0, nullptr);
 
     // choose random sample loc from grid - make sure valid in the obj & add to active list & background grid
     // implement this part by doing actual pos of object instead of rand location in obj and just having the alg
     //      breaking out from there [since can only do linear transformations on obj - must be valid pos in the obj]
+
     glm::vec3 randGridLoc = posToGridLoc(m.transform.position());
     Sample* start = new Sample(randGridLoc, m.transform.position(), 0);
     activeValidSamples.push_back(start);
 
     if (threeDim) {
+        std::cout<<"randGridLoc:"<<randGridLoc[0]<<","<<randGridLoc[1]<<","<<randGridLoc[2]<<std::endl;
         backgroundGrid3D[randGridLoc[0]][randGridLoc[1]][randGridLoc[2]] = start;
     } else {
         backgroundGrid2D[randGridLoc[0]][randGridLoc[1]] = start;
     }
 
+    std::cout<<"here2"<<std::endl;
+
     // number of samples tested at each x_i in the while loop [kept constant]
     int K = 10;
+
+    std::cout<<"poissonSampler::poissonAlg beginning the while loop"<<std::endl;
 
     // while activeValidSampleSize > 0
     // do:
@@ -182,7 +197,11 @@ void PoissonSampler::poissonAlg(){
             }
         }
 
+        std::cout<<"poissonSampler::poissonAlg while(activeValidSamples.size() > 0 -- the sample size: "<<activeValidSamples.size()<<std::endl;
+
     } //end: while(activeValidSamples.size() > 0)
+
+    std::cout<<"poissonSampler::poissonAlg finished"<<std::endl;
 
 }
 
@@ -206,6 +225,8 @@ glm::vec3 PoissonSampler::randomLocAround(glm::vec3 pos) {
  */
 void PoissonSampler::initializeBackgroundGridsandBVH() {
     // grid dim: RADIUS/(dim_n)^1/2 --> bigger r is bigger voxels is fewer samples
+
+    std::cout<<"poissonSampler::initializeBackgroundGridsandBVH"<<std::endl;
 
     int nDim = 3;
     if (!threeDim) { nDim = 2; }
@@ -232,6 +253,7 @@ void PoissonSampler::initializeBackgroundGridsandBVH() {
                                    std::vector<Sample*>(voxelDim[1])
                              );
 
+    std::cout<<"poissonSampler::initializeBackgroundGridsandBVH finished"<<std::endl;
 }
 
 /**
@@ -266,6 +288,8 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
  */
 bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
 
+    std::cout<<"poissonSampler::validLocWithinObj checking if sample is in obj"<<std::endl;
+
     if (threeDim) {
 
         int numIsx = 0;
@@ -276,6 +300,8 @@ bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
             return (numIsx %2 == 0) ? false : true;
         }
     }
+
+    std::cout<<"poissonSampler::validLocWithinObj finished"<<std::endl;
 
     // else: 2dim
 

@@ -15,12 +15,7 @@ class PoissonSampler : public Drawable
 {
 public:
     //assuming only inputting primitives in scene that ALL need to be filled
-    PoissonSampler(Mesh& mesh, Scene& scene, bool isThreeDim)
-        : m(mesh), s(scene), bvh(nullptr), bbox(nullptr),
-            threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)) {
-
-        initializeBackgroundGridsandBVH();
-    }
+    PoissonSampler(Mesh& mesh, Scene& scene, bool isThreeDim);
     ~PoissonSampler() { backgroundGrid3D.clear(); backgroundGrid2D.clear(); }
 
     // all variables below are initialized in the constructor's list

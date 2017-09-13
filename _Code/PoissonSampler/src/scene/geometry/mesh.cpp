@@ -1,18 +1,16 @@
 #include <scene/geometry/mesh.h>
 #include <la.h>
+#include <QDateTime>
 #include <tinyobj/tiny_obj_loader.h>
 #include <iostream>
+
+pcg32 Triangle::colorRNG = pcg32(QDateTime::currentMSecsSinceEpoch());
 
 Bounds3f Triangle::WorldBound() const
 {
     // start with min and max in world space for triangle
     Bounds3f result = Union(Bounds3f(points[0], points[1]), points[2]);
     return result;
-}
-
-float Triangle::Area() const
-{
-    return glm::length(glm::cross(points[0] - points[1], points[2] - points[1])) * 0.5f;
 }
 
 Triangle::Triangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3):
@@ -44,9 +42,9 @@ Triangle::Triangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3
     uvs[2] = t3;
 }
 
-void Triangle::create() {
-    // actually handled in mesh's create?
-}
+//void Triangle::create() {
+//    // actually handled in mesh's create?
+//}
 
 float TriArea(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3)
 {
@@ -61,6 +59,35 @@ Normal3f Triangle::GetNormal(const Point3f &P) const
     float A1 = TriArea(points[0], points[2], P);
     float A2 = TriArea(points[0], points[1], P);
     return glm::normalize(normals[0] * A0/A + normals[1] * A1/A + normals[2] * A2/A);
+}
+
+void Triangle::InitializeIntersection(Intersection *isect, float t, Point3f pLocal) const
+{
+    isect->point = pLocal;
+    isect->uv = GetUVCoordinates(pLocal);
+    ComputeTBN(pLocal, &(isect->normalGeometric), &(isect->tangent), &(isect->bitangent));
+    isect->t = t;
+}
+
+void Triangle::ComputeTBN(const Point3f &P, Normal3f *nor, Vector3f *tan, Vector3f *bit) const
+{
+    *nor = GetNormal(P);
+    CoordinateSystem( *nor, tan, bit);
+}
+
+Point2f Triangle::GetUVCoordinates(const Point3f &point) const
+{
+    float A = TriArea(points[0], points[1], points[2]);
+    float A0 = TriArea(points[1], points[2], point);
+    float A1 = TriArea(points[0], points[2], point);
+    float A2 = TriArea(points[0], points[1], point);
+    return uvs[0] * A0/A + uvs[1] * A1/A + uvs[2] * A2/A;
+}
+
+
+float Triangle::Area() const
+{
+    return glm::length(glm::cross(points[0] - points[1], points[2] - points[1])) * 0.5f;
 }
 
 
@@ -85,127 +112,6 @@ bool Triangle::Intersect(const Ray& r, Intersection* isect) const
         return true;
     }
     return false;
-}
-
-void Triangle::InitializeIntersection(Intersection *isect, float t, Point3f pLocal) const
-{
-    isect->point = pLocal;
-    isect->uv = GetUVCoordinates(pLocal);
-    ComputeTriangleTBN(pLocal, &(isect->normalGeometric), &(isect->tangent), &(isect->bitangent), isect->uv);
-    isect->t = t;
-}
-
-void Triangle::ComputeTBN(const Point3f &P, Normal3f *nor, Vector3f *tan, Vector3f *bit) const
-{
-    //Triangle uses ComputeTriangleTBN instead of this function.
-
-    ComputeTriangleTBN(P, nor, tan, bit, this->GetUVCoordinates(P));
-}
-
-void Triangle::ComputeTriangleTBN(const Point3f &P, Normal3f *nor, Vector3f *tan, Vector3f *bit, const Point2f &uv) const
-{
-    *nor = GetNormal(P);
-    CoordinateSystem( *nor, tan, bit);
-
-    // NORMAL
-
-//    *nor = GetNormal(P);
-
-//    // TANGENTS FOR TRIANGLE: computing based on change in uvs in direction of other points on the triangle
-//    Point3f p0 = points[0];
-//    Point3f p1 = points[1];
-//    Point3f p2 = points[2];
-//    Point2f uv0 = uvs[0];
-//    Point2f uv1 = uvs[1];
-//    Point2f uv2 = uvs[2];
-//    // POINT 0
-//    // tangent for triangle point 0
-//    Vector3f delP1 = p1 - p0;
-//    Vector3f delP2 = p2 - p0;
-//    Vector2f delUV1 = uv1 - uv0;
-//    Vector2f delUV2 = uv2 - uv0;
-//    Vector3f t0 = glm::normalize( (delUV2.y * delP1 - delUV1.y * delP2) / (delUV2.y * delUV1.x - delUV1.y * delUV2.x) );
-//    // bitangent for triangle point 0
-//    Vector3f b0 = glm::normalize( (delP2 - delUV2.x*t0) / delUV2.y );
-//    // POINT 1
-//    // tangent for triangle point 1
-//    delP1 = p0 - p1;
-//    delP2 = p2 - p1;
-//    delUV1 = uv0 - uv1;
-//    delUV2 = uv2 - uv1;
-//    Vector3f t1 =  glm::normalize( (delUV2.y * delP1 - delUV1.y * delP2) / (delUV2.y * delUV1.x - delUV1.y * delUV2.x) );
-//    // bitangent for triangle point 1
-//    Vector3f b1 = glm::normalize( (delP2 - delUV2.x*t0) / delUV2.y );
-//    // POINT 2
-//    // tangent for triangle point 2
-//    delP1 = p0 - p2;
-//    delP2 = p1 - p2;
-//    delUV1 = uv0 - uv2;
-//    delUV2 = uv1 - uv2;
-//    Vector3f t2 = glm::normalize( (delUV2.y * delP1 - delUV1.y * delP2) / (delUV2.y * delUV1.x - delUV1.y * delUV2.x) );
-//    // bitangent for triangle point 2
-//    Vector3f b2 = glm::normalize( (delP2 - delUV2.x*t0) / delUV2.y );
-
-//    // TANGENTS AND BITANGENTS FOR INPUTED POINT IN THE TRIANGLE
-
-//    // calculating values for U and for V for intersection on triangle
-
-//    // start with point equation in terms of u and v to find the point where A, B, C are p0, p1, p2
-//    // P = A + U * (C - A) + V * (B - A)
-//    // note: v0 = C - A, v1 = B - A, v2 = P - A
-//    // so we get that v2 = U * v0 + V * v1
-//    // and from that we can use dot products and get the following system of equations
-//    //  v2 dot v0 == U(v0 dot v0) + V(v1 dot v0)
-//    //  v2 dot v1 == U(v0 dot v1) + V(v1 dot v1)
-//    // solve for U and V and you get the following two equations:
-//    // U = ((v1 dot v1)(v2 dot v0) - (v1 dot v0)(v2 dot v1)) / ((v0 dot v0)(v1 dot v1) - (v0 dot v1)(v1 dot v0))
-//    // v = ((v0 dot v0)(v2 dot v1) - (v0 dot v1)(v2 dot v0)) / ((v0 dot v0)(v1 dot v1) - (v0 dot v1)(v1 dot v0))
-
-//    // Set up
-//    Vector3f v0 = p2 - p0;
-//    Vector3f v1 = p1 - p0;
-//    Vector3f v2 = P - p0;
-//    // Compute dot products
-//    float dot00 = glm::dot(v0, v0);
-//    float dot01 = glm::dot(v0, v1);
-//    float dot02 = glm::dot(v0, v2);
-//    float dot11 = glm::dot(v1, v1);
-//    float dot12 = glm::dot(v1, v2);
-//    // Compute barycentric coordinates
-//    float invD = 1.0f / (dot00 * dot11 - dot01 * dot01);
-//    float U = (dot11 * dot02 - dot01 * dot12) * invD;
-//    float V = (dot00 * dot12 - dot01 * dot02) * invD;
-
-//    // using U and V to compute tangent and bitangent vectors at this point of intersection
-//    *tan = t0*(1 - U - V) + t1*U + t2*V;
-//    *bit = b0*(1 - U - V) + b1*U + b2*V;
-
-    if (std::isnan(tan->x) || std::isnan(tan->y) || std::isnan(tan->z)) {
-        throw;
-    }
-    if (std::isnan(bit->x) || std::isnan(bit->y) || std::isnan(bit->z)) {
-        throw;
-    }
-    if (std::isnan(nor->x) || std::isnan(nor->y) || std::isnan(nor->z)) {
-        throw;
-    }
-}
-
-
-Intersection Triangle::Sample(const Point2f &xi, Float *pdf) const
-{
-    //TODO for extra credit
-    return Intersection();
-}
-
-
-Point2f Triangle::GetUVCoordinates(const Point3f &point) const
-{
-    float A = TriArea(points[0], points[1], points[2]);
-    float A0 = TriArea(points[1], points[2], point);
-    float A1 = TriArea(points[0], points[2], point);
-    float A2 = TriArea(points[0], points[1], point);
-    return uvs[0] * A0/A + uvs[1] * A1/A + uvs[2] * A2/A;
 }
 
 void Mesh::LoadOBJ(const QStringRef &filename, const QStringRef &local_path, const Transform &transform)
@@ -259,4 +165,46 @@ void Mesh::LoadOBJ(const QStringRef &filename, const QStringRef &local_path, con
         //An error loading the OBJ occurred!
         std::cout << errors << std::endl;
     }
+}
+
+void Mesh::create(){
+    //Count the number of vertices for each face so we can get a count for the entire mesh
+        std::vector<glm::vec3> vert_pos;
+        std::vector<glm::vec3> vert_nor;
+        std::vector<glm::vec3> vert_col;
+        std::vector<GLuint> vert_idx;
+
+        unsigned int index = 0;
+
+        for(int i = 0; i < faces.size(); i++){
+            std::shared_ptr<Triangle> tri = faces[i];
+            Color3f color(colorRNG.nextFloat(), colorRNG.nextFloat(), colorRNG.nextFloat());
+            vert_pos.push_back(tri->points[0]); vert_nor.push_back(tri->normals[0]); vert_col.push_back(color);
+            vert_pos.push_back(tri->points[1]); vert_nor.push_back(tri->normals[1]); vert_col.push_back(color);
+            vert_pos.push_back(tri->points[2]); vert_nor.push_back(tri->normals[2]); vert_col.push_back(color);
+            vert_idx.push_back(index++);vert_idx.push_back(index++);vert_idx.push_back(index++);
+        }
+
+        count = vert_idx.size();
+        int vert_count = vert_pos.size();
+
+        bufIdx.create();
+        bufIdx.bind();
+        bufIdx.setUsagePattern(QOpenGLBuffer::StaticDraw);
+        bufIdx.allocate(vert_idx.data(), count * sizeof(GLuint));
+
+        bufPos.create();
+        bufPos.bind();
+        bufPos.setUsagePattern(QOpenGLBuffer::StaticDraw);
+        bufPos.allocate(vert_pos.data(), vert_count * sizeof(glm::vec3));
+
+        bufCol.create();
+        bufCol.bind();
+        bufCol.setUsagePattern(QOpenGLBuffer::StaticDraw);
+        bufCol.allocate(vert_col.data(), vert_count * sizeof(glm::vec3));
+
+        bufNor.create();
+        bufNor.bind();
+        bufNor.setUsagePattern(QOpenGLBuffer::StaticDraw);
+        bufNor.allocate(vert_nor.data(), vert_count * sizeof(glm::vec3));
 }

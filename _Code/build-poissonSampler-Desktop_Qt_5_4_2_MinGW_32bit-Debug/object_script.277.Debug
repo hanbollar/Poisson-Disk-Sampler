@@ -13,12 +13,12 @@ INPUT(
 ./debug\tiny_obj_loader.o
 ./debug\cameracontrolshelp.o
 ./debug\sampler.o
-./debug\shape.o
 ./debug\mesh.o
 ./debug\warpfunctions.o
 ./debug\bounds.o
 ./debug\poissonsampler.o
 ./debug\poissonbvh.o
+./debug\film.o
 ./debug\qrc_glsl.o
 ./debug\qrc_sfx.o
 ./debug\moc_mainwindow.o

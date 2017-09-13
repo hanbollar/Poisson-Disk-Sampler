@@ -24,22 +24,21 @@ void Scene::SetCamera(const Camera &c)
 
 bool Scene::Intersect(const Ray &ray, Intersection *isect) const
 {
-    std::cout<<"SCENE:: INTERSECT - STILL TO BE IMPLEMENTED"<<std::endl;
-//    bool result = false;
-//    for(std::shared_ptr<Mesh> p : primitives)
-//    {
-//        Intersection testIsect;
-//        if(p->Intersect(ray, &testIsect))
-//        {
-//            if(testIsect.t < isect->t || isect->t < 0)
-//            {
-//                *isect = testIsect;
-//                result = true;
-//            }
-//        }
-//    }
-//    return result;
-    return false;
+    bool result = false;
+    for(Mesh* m : all_mesh){
+        for (std::shared_ptr<Triangle> t : m->faces) {
+            Intersection testIsect;
+            if(t->Intersect(ray, &testIsect))
+            {
+                if(testIsect.t < isect->t || isect->t < 0)
+                {
+                    *isect = testIsect;
+                    result = true;
+                }
+            }
+        }
+    }
+    return result;
 }
 
 void Scene::CreateTestScene()

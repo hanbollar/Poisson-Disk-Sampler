@@ -2,7 +2,6 @@
 #include <QList>
 #include <scene/camera.h>
 
-#include <scene/geometry/shape.h>
 #include <scene/geometry/mesh.h>
 
 class Scene
