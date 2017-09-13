@@ -3,7 +3,7 @@
 #include "raytracing/intersection.h"
 #include "raytracing/ray.h"
 #include "scene/bounds.h"
-#include <openGL/drawable.h>
+#include "openGL/drawable.h"
 
 class Triangle
 {

@@ -99,7 +99,6 @@ DIST          =  ..\PoissonSampler\src\mainwindow.h \
 		..\PoissonSampler\src\mygl.h \
 		..\PoissonSampler\src\scene\camera.h \
 		..\PoissonSampler\src\la.h \
-		..\PoissonSampler\src\drawable.h \
 		..\PoissonSampler\src\scene\scene.h \
 		..\PoissonSampler\src\openGL\drawable.h \
 		..\PoissonSampler\src\openGL\glwidget277.h \
@@ -2613,17 +2612,14 @@ release/mygl.o: ../PoissonSampler/src/mygl.cpp ../PoissonSampler/src/mygl.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qguiapplication.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qinputmethod.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QKeyEvent \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QXmlStreamReader \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qxmlstream.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QFileDialog \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qfiledialog.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qdir.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qfileinfo.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qdialog.h \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QThreadPool \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qthreadpool.h \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qthread.h \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qrunnable.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QTextStream \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QXmlStreamReader \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qxmlstream.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLTexture \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qopengltexture.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QDateTime

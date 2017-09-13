@@ -29,7 +29,6 @@ HEADERS += \
     $$PWD/mygl.h \
     $$PWD/scene/camera.h \
     $$PWD/la.h \
-    $$PWD/drawable.h \
     $$PWD/scene/scene.h \
     $$PWD/openGL/drawable.h \
     $$PWD/openGL/glwidget277.h \
