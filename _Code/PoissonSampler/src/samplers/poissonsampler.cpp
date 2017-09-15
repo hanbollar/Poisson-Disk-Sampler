@@ -2,7 +2,7 @@
 
 PoissonSampler::PoissonSampler(Mesh &mesh, Scene &scene, bool isThreeDim)
     : m(mesh), s(scene), bvh(nullptr), bbox(nullptr),
-        threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)) {
+        threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)), numPoints(0), samp(5, 5) {
 
     initializeBackgroundGridsandBVH();
     poissonAlg();
@@ -122,8 +122,6 @@ void PoissonSampler::poissonAlg(){
         backgroundGrid2D[randGridLoc[0]][randGridLoc[1]] = start;
     }
 
-    std::cout<<"here2"<<std::endl;
-
     // number of samples tested at each x_i in the while loop [kept constant]
     int K = 10;
 
@@ -139,7 +137,9 @@ void PoissonSampler::poissonAlg(){
     //      } if after all checked and no k were added --> remove x_i from active list
     // return completed list of samples
     while(activeValidSamples.size() > 0) {
-        Sample* x_i = activeValidSamples[(int)(std::rand() / (RAND_MAX) * activeValidSamples.size())];
+        float abTest = samp.Get2D().x;
+        std::cout<<"test samp val"<<abTest<<std::endl;
+        Sample* x_i = activeValidSamples[(int)(abTest * activeValidSamples.size())];
 
         bool addedK = false;
         for (int i=0; i<K; i++) {
@@ -181,7 +181,7 @@ void PoissonSampler::poissonAlg(){
                 }//end: for (int j = checkingMin[1]; j < checkingMax[1]; j++);
             }//end: for (int i = checkingMin[0]; i < checkingMax[0]; i++);
 
-
+            // have all valid locations but not valid within obj -- NEED TO RESOLVE
 
             if (valid && validLocWithinObj(pos)) {
 
@@ -214,6 +214,8 @@ void PoissonSampler::poissonAlg(){
             } else {
                 backgroundGrid2D[gLoc_x_i[0]][gLoc_x_i[1]] = nullptr;
             }
+
+            std::cout<<"added grid loc"<<std::endl;
         }
 
         std::cout<<"poissonSampler::poissonAlg while(activeValidSamples.size() > 0 -- the sample size: "<<activeValidSamples.size()<<std::endl;
@@ -225,9 +227,9 @@ void PoissonSampler::poissonAlg(){
 }
 
 glm::vec3 PoissonSampler::randomLocAround(glm::vec3 pos) {
-    float x = std::rand() / (RAND_MAX) * 2 * RADIUS;
-    float y = std::rand() / (RAND_MAX) * 2 * RADIUS;
-    float z = std::rand() / (RAND_MAX) * 2 * RADIUS;
+    float x = samp.Get2D().x * 2 * RADIUS;
+    float y = samp.Get2D().x * 2 * RADIUS;
+    float z = samp.Get2D().x * 2 * RADIUS;
 
     x = (x > RADIUS) ? pos[0] + x : pos[0] - x;
     y = (y > RADIUS) ? pos[1] + y : pos[1] - y;

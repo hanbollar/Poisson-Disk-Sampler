@@ -26,9 +26,11 @@ public:
     glm::vec3 voxelDim;
     PoissonBVH* bvh;
 
+    Sampler samp;
+
     int numPoints;
 
-    float RADIUS = 0.025f;
+    float RADIUS = 0.25f;
 
     std::vector<std::vector<std::vector<Sample*>>> backgroundGrid3D;
     std::vector<std::vector<Sample*>> backgroundGrid2D;

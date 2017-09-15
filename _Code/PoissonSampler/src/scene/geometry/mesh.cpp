@@ -96,7 +96,7 @@ bool Triangle::Intersect(const Ray& r, Intersection* isect) const
 {
     //1. Ray-plane intersection
     float t =  glm::dot(planeNormal, (points[0] - r.origin)) / glm::dot(planeNormal, r.direction);
-    if(t < 0) return false;
+//    if(t < 0) return false;
 
     glm::vec3 P = r.origin + t * r.direction;
     //2. Barycentric test
