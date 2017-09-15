@@ -1,19 +1,25 @@
 #pragma once
-#include "scene/scene.h"
-#include "raytracing/ray.h"
 #include "globals.h"
 #include <iostream>
 
 #include "eigen/Eigen/Dense"
 #include "scene/geometry/mesh.h"
 #include "scene/bounds.h"
+#include "scene/scene.h"
 #include "raytracing/intersection.h"
+#include "samplers/poissonsampler.h"
 #include "raytracing/ray.h"
-#include <openGL/drawable.h>
+#include "openGL/drawable.h"
+#include "openGL/shaderprogram.h"
+//#include "openGL/glwidget277.h"
+#include "mygl.h"
 
 class P_BVHNode;
+//class QWidget277;
+class ShaderProgram;
+class MyGL;
 
-class PoissonBVH /*: public Drawable*/
+class PoissonBVH : public Drawable
 {
 public:
     PoissonBVH(Mesh& m);
@@ -21,13 +27,16 @@ public:
 
     P_BVHNode* root;
 
-//    virtual void create();  // implemented for Drawable
+    void create();  // implemented for Drawable
+    GLenum drawMode();
+
+    void drawAll(MyGL& context, ShaderProgram& s);
 
     void buildBVH(Mesh& m);
     bool intersect(Ray &ray, Intersection *isect, int* numIntersections);
 };
 
-class P_BVHNode
+class P_BVHNode : public Drawable
 {
 public:
     P_BVHNode() : l(nullptr), r(nullptr), tris(QList<std::shared_ptr<Triangle>>()), bbox(nullptr) {}
@@ -40,6 +49,10 @@ public:
     Bounds3f* bbox;
     P_BVHNode* l;
     P_BVHNode* r;
+
+    void create();
+    GLenum drawMode();
+    void draw(MyGL& context, ShaderProgram& s);
 
     void buildSelfAsChild(QList<std::shared_ptr<Triangle>>& t, int minNum);
 

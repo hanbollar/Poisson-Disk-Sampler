@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 static const unsigned char qt_resource_data[] = {
-  // D:/_myFiles/_SCHOOL/CIS700_Fanfu/CIS700Fanfu-P1-PoissonDiskSampler/_Code/PoissonSampler/include/complete.wav
+  // D:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/include/complete.wav
   0x0,0x2,0xf,0x44,
   0x52,
   0x49,0x46,0x46,0x3c,0xf,0x2,0x0,0x57,0x41,0x56,0x45,0x66,0x6d,0x74,0x20,0x10,

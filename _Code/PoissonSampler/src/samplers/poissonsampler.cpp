@@ -24,15 +24,18 @@ void PoissonSampler::create() {
     int j=0;
     int k=0;
 
-    int numPoints = 0;
+    this->numPoints = 0;
 
     if (threeDim) {
         while (i<backgroundGrid3D.size()) {
             while (j<(backgroundGrid3D[i]).size()) {
                 while (k<(backgroundGrid3D[i][j]).size()) {
 
-                    pointIndex.push_back(numPoints);
-                    posVector.push_back((backgroundGrid3D[i][j][k])->pos);
+                    if (backgroundGrid3D[i][j][k]!= nullptr) {
+                        pointIndex.push_back(numPoints);
+                        posVector.push_back((backgroundGrid3D[i][j][k])->pos);
+                        numPoints += 1;
+                    }
 
                     k++;
                 }
@@ -44,8 +47,13 @@ void PoissonSampler::create() {
         while (i<backgroundGrid3D.size()) {
             while (j<backgroundGrid3D[i].size()) {
 
-                pointIndex.push_back(numPoints);
-                posVector.push_back((backgroundGrid2D[i][j])->pos);
+                if (backgroundGrid2D[i][j]!= nullptr) {
+                    pointIndex.push_back(numPoints);
+                    posVector.push_back((backgroundGrid2D[i][j])->pos);
+                    numPoints += 1;
+                }
+
+
 
                 j++;
             }
@@ -103,7 +111,7 @@ void PoissonSampler::poissonAlg(){
     // implement this part by doing actual pos of object instead of rand location in obj and just having the alg
     //      breaking out from there [since can only do linear transformations on obj - must be valid pos in the obj]
 
-    glm::vec3 randGridLoc = posToGridLoc(m.transform.position());
+    glm::vec3 randGridLoc = posToGridLoc(m.faces.first().get()->points[0]);
     Sample* start = new Sample(randGridLoc, m.transform.position(), 0);
     activeValidSamples.push_back(start);
 
@@ -137,6 +145,8 @@ void PoissonSampler::poissonAlg(){
         for (int i=0; i<K; i++) {
             glm::vec3 pos = randomLocAround(x_i->pos);
 
+            std::cout<<"on item: i:"<<i<<" <K:"<<K<<" loc:"<<pos[0]<<","<<pos[1]<<","<<pos[2]<<std::endl;
+
             //note must make sure ^^ provides valid position that will be within the current grid area so sampling must check that first
             glm::vec3 gLoc = posToGridLoc(pos);
 
@@ -146,11 +156,18 @@ void PoissonSampler::poissonAlg(){
             glm::vec3 checkingMin = gLoc - glm::vec3(1.0);
             glm::vec3 checkingMax = gLoc + glm::vec3(1.0);
 
+            checkingMin = glm::vec3(glm::clamp(checkingMin[0], 0.0f, (float)INFINITY),
+                                    glm::clamp(checkingMin[1], 0.0f, (float)INFINITY),
+                                    glm::clamp(checkingMin[2], 2.0f, (float)INFINITY));
+
             bool valid = true;
 
-            for (int j = checkingMin[0]; j < checkingMax[0]; i++) {
-                for (int k = checkingMin[1]; k < checkingMax[1]; j++) {
-                    for(int l = checkingMin[2]; l < checkingMax[2] && threeDim; k++) {
+            for (int j = checkingMin[0]; j < checkingMax[0]; j++) {
+                std::cout<<"j:"<<j<<std::endl;
+                for (int k = checkingMin[1]; k < checkingMax[1]; k++) {
+                    std::cout<<"    k:"<<k<<std::endl;
+                    for(int l = checkingMin[2]; l < checkingMax[2] && threeDim; l++) {
+                        std::cout<<"        l:"<<l<<std::endl;
 
                         if (backgroundGrid3D[j][k][l] != nullptr) {
                             valid &= ! (glm::distance(pos, x_i->pos) <= RADIUS && (glm::distance(pos, x_i->pos) <= 2*RADIUS));
@@ -163,6 +180,8 @@ void PoissonSampler::poissonAlg(){
 
                 }//end: for (int j = checkingMin[1]; j < checkingMax[1]; j++);
             }//end: for (int i = checkingMin[0]; i < checkingMax[0]; i++);
+
+
 
             if (valid && validLocWithinObj(pos)) {
 

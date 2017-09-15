@@ -110,17 +110,12 @@ void MyGL::GLDrawScene()
         prog_lambert.setModelMatrix(glm::mat4(1.0f));
         prog_lambert.draw(*this, *poissonMesh);
     } else if (poissonSampler != nullptr){
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
         prog_lambert.setModelMatrix(glm::mat4(1.0f));
         prog_lambert.draw(*this, *poissonSampler);
+        poissonSampler->bvh->drawAll(*this, prog_flat);
     }
-
-    prog_flat.setModelMatrix(glm::mat4(1.0f));
-    prog_flat.draw(*this, scene.camera);
-
-    //        for (Mesh* m: scene.all_mesh) {
-    //            prog_lambert.setModelMatrix(glm::mat4(1.0f));
-    //            prog_lambert.draw(*this, *m);
-    //        }
 
 }
 
@@ -194,6 +189,8 @@ void MyGL::slot_poissonClicked() {
 
         poissonSampler = new PoissonSampler(*poissonMesh, scene, threeDim);
         poissonSampler->create();
+        poissonSampler->bvh->create();
+        std::cout<<"numSamples:"<<poissonSampler->numPoints<<std::endl;
     }
 }
 

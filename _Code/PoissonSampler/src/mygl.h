@@ -24,6 +24,8 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
 
+class PoissonSampler;
+
 class MyGL
     : public GLWidget277
 {

@@ -778,6 +778,7 @@ release/moc_mygl.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLVertexA
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/ComplexSchur_LAPACKE.h \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h \
 		../PoissonSampler/src/samplers/poissonbvh.h \
+		../PoissonSampler/src/mygl.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QStringRef \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QFile \
 		../PoissonSampler/src/mygl.h
@@ -1480,6 +1481,7 @@ ui_mainwindow.h: ../PoissonSampler/forms/mainwindow.ui \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/ComplexSchur_LAPACKE.h \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h \
 		../PoissonSampler/src/samplers/poissonbvh.h \
+		../PoissonSampler/src/mygl.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QStringRef \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QFile
 	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\uic.exe ..\PoissonSampler\forms\mainwindow.ui -o ui_mainwindow.h
@@ -5651,7 +5653,21 @@ release/poissonsampler.o: ../PoissonSampler/src/samplers/poissonsampler.cpp ../P
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/RealSchur_LAPACKE.h \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/ComplexSchur_LAPACKE.h \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h \
-		../PoissonSampler/src/samplers/poissonbvh.h
+		../PoissonSampler/src/samplers/poissonbvh.h \
+		../PoissonSampler/src/openGL/shaderprogram.h \
+		../PoissonSampler/src/mygl.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLVertexArrayObject \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qopenglvertexarrayobject.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QRubberBand \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QMouseEvent \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QTime \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qdatetime.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia/QSound \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia/qsound.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia/qtmultimediadefs.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QStringRef \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QFile
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\poissonsampler.o ..\PoissonSampler\src\samplers\poissonsampler.cpp
 
 release/poissonbvh.o: ../PoissonSampler/src/samplers/poissonbvh.cpp ../PoissonSampler/src/samplers/poissonsampler.h \
@@ -6104,7 +6120,21 @@ release/poissonbvh.o: ../PoissonSampler/src/samplers/poissonbvh.cpp ../PoissonSa
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/RealSchur_LAPACKE.h \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/ComplexSchur_LAPACKE.h \
 		../PoissonSampler/include/eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h \
-		../PoissonSampler/src/samplers/poissonbvh.h
+		../PoissonSampler/src/samplers/poissonbvh.h \
+		../PoissonSampler/src/openGL/shaderprogram.h \
+		../PoissonSampler/src/mygl.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLVertexArrayObject \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qopenglvertexarrayobject.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QRubberBand \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QMouseEvent \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QTime \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qdatetime.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia/QSound \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia/qsound.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia/qtmultimediadefs.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QStringRef \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QFile
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\poissonbvh.o ..\PoissonSampler\src\samplers\poissonbvh.cpp
 
 release/film.o: ../PoissonSampler/src/raytracing/film.cpp ../PoissonSampler/src/raytracing/film.h \

@@ -26,13 +26,14 @@ public:
     glm::vec3 voxelDim;
     PoissonBVH* bvh;
 
-    float RADIUS = 0.25f;
+    int numPoints;
+
+    float RADIUS = 0.025f;
 
     std::vector<std::vector<std::vector<Sample*>>> backgroundGrid3D;
     std::vector<std::vector<Sample*>> backgroundGrid2D;
 
     void initializeBackgroundGridsandBVH();
-\
     void poissonAlg();
 
     glm::vec3 posToGridLoc(glm::vec3 p);

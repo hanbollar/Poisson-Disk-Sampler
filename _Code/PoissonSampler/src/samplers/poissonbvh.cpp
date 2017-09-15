@@ -4,98 +4,165 @@ PoissonBVH::PoissonBVH(Mesh& m) : root(new P_BVHNode()) {
     buildBVH(m);
 }
 
-//void PoissonBVH::create() {
-//    //create new vbo
-//       //set drawmode to GL_Line
-//       //should interpolate from one vertex col value to other
-//       //only need to put in starting vertex and ending vertex so ya
+GLenum PoissonBVH::drawMode() {
+    return GL_LINES;
+}
 
-//       //  line indices. first in line is prevVert, second in line is currentVert
-//       std::vector<GLuint> lineIndices;
-//       //  pos vec4s
-//       std::vector<glm::vec4> posVector;
-//       //  color vec4s
-//       std::vector<glm::vec4> colVector;
-//       //note: pos, and color vectors need to be 1:1 to eachother
+GLenum P_BVHNode::drawMode() {
+    return GL_LINES;
+}
 
-//       HalfEdge* curr = currentEdge;
-//       Vertex* currVert = curr->vert;
-//       //to find the prevVert
-//       bool first = true;
-//       while (first || curr->next != currentEdge) {
-//           first = false;
-//           curr = curr->next;
-//       }
-//       Vertex* prevVert = curr->vert;
+void PoissonBVH::create() {
+    // create every bbox for every node in this tree --> bbox's are the drawable items
 
-//       glm::vec4 currVertPos = glm::vec4(currVert->pos[0], currVert->pos[1], currVert->pos[2], 1.0f);
-//       glm::vec4 prevVertPos = glm::vec4(prevVert->pos[0], prevVert->pos[1], prevVert->pos[2], 1.0f);
+    if (root != nullptr) {
+        root->create();
+        if (root->l != nullptr) {
+            root->l->create();
+        }
+        if (root->r != nullptr) {
+            root->r->create();
+        }
+    }
+}
 
-//       lineIndices.push_back(0);
-//       lineIndices.push_back(1);
-//       posVector.push_back(prevVertPos);
-//       posVector.push_back(currVertPos);
+void P_BVHNode::create() {
 
-//       colVector.push_back(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-//       colVector.push_back(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    std::vector<glm::vec3> vert_pos;
+    std::vector<glm::vec3> vert_nor;
+    std::vector<glm::vec3> vert_col;
+    std::vector<GLuint> vert_idx;
 
-//       count = lineIndices.size();
+    // setting up vertex locations
 
-//       //  handling line indices vbo
-//       generateIdx();
-//       context->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufIdx);
-//       context->glBufferData(GL_ELEMENT_ARRAY_BUFFER, lineIndices.size() * sizeof(GLuint), lineIndices.data(), GL_STATIC_DRAW);
+    glm::vec3 min = bbox->min;
+    glm::vec3 max = bbox->max;
 
-//       //  handling of pos vec3s vbo
-//       generatePos();
-//       context->glBindBuffer(GL_ARRAY_BUFFER, bufPos);
-//       context->glBufferData(GL_ARRAY_BUFFER, posVector.size() * sizeof(glm::vec4), posVector.data(), GL_STATIC_DRAW);
+    // 1    0 max
+    // 3    2
+    //
+    // 5    4
+    // 7    6
+    // min
 
-//       //  handling of color vbo
-//       generateCol();
-//       context->glBindBuffer(GL_ARRAY_BUFFER, bufCol);
-//       context->glBufferData(GL_ARRAY_BUFFER, colVector.size() * sizeof(glm::vec4), colVector.data(), GL_STATIC_DRAW);
+    vert_pos.push_back(glm::vec3(max[0], max[1], max[2])); // 0
+    vert_pos.push_back(glm::vec3(min[0], max[1], max[2])); // 1
+    vert_pos.push_back(glm::vec3(max[0], max[1], min[2])); // 2
+    vert_pos.push_back(glm::vec3(min[0], max[1], min[2])); // 3
+    vert_pos.push_back(glm::vec3(max[0], min[1], max[2])); // 4
+    vert_pos.push_back(glm::vec3(min[0], min[1], max[2])); // 5
+    vert_pos.push_back(glm::vec3(max[0], min[1], min[2])); // 6
+    vert_pos.push_back(glm::vec3(min[0], min[1], min[2])); // 7
 
-////    glDrawArrays to use GL_LINES instead of GL_TRIANGLES
-////    GLuint cub_idx[CUB_IDX_COUNT];
-////    glm::vec3 cub_vert_pos[CUB_VERT_COUNT];
-////    glm::vec3 cub_vert_nor[CUB_VERT_COUNT];
-////    glm::vec3 cub_vert_col[CUB_VERT_COUNT];
+    vert_idx.push_back(2); // top
+    vert_idx.push_back(0);
+    vert_idx.push_back(0);
+    vert_idx.push_back(1);
+    vert_idx.push_back(1);
+    vert_idx.push_back(3);
+    vert_idx.push_back(3);
+    vert_idx.push_back(2);
 
-////    createCubeVertexPositions(cub_vert_pos);
-////    createCubeVertexNormals(cub_vert_nor);
-////    createCubeIndices(cub_idx);
+    vert_idx.push_back(2); // right
+    vert_idx.push_back(6);
+    vert_idx.push_back(6);
+    vert_idx.push_back(4);
+    vert_idx.push_back(4);
+    vert_idx.push_back(0);
+    vert_idx.push_back(0);
+    vert_idx.push_back(2);
+
+    vert_idx.push_back(2); // front
+    vert_idx.push_back(3);
+    vert_idx.push_back(3);
+    vert_idx.push_back(7);
+    vert_idx.push_back(7);
+    vert_idx.push_back(6);
+    vert_idx.push_back(6);
+    vert_idx.push_back(2);
+
+    vert_idx.push_back(2);
+    vert_idx.push_back(6);
+
+    vert_idx.push_back(6);
+    vert_idx.push_back(7);
+    vert_idx.push_back(7);
+    vert_idx.push_back(5); // bottom
+    vert_idx.push_back(5);
+    vert_idx.push_back(4);
+    vert_idx.push_back(4);
+    vert_idx.push_back(6);
+
+    vert_idx.push_back(6);
+    vert_idx.push_back(7);
+
+    vert_idx.push_back(7);
+    vert_idx.push_back(3); // left
+    vert_idx.push_back(3);
+    vert_idx.push_back(1);
+    vert_idx.push_back(1);
+    vert_idx.push_back(5);
+
+    vert_idx.push_back(1);  // back
+    vert_idx.push_back(0);
+    vert_idx.push_back(0);
+    vert_idx.push_back(4);
+    vert_idx.push_back(4);
+    vert_idx.push_back(5);
+
+    for(int i = 0; i < vert_idx.size(); i++){
+
+        vert_col.push_back(glm::vec3(1, 1, 1));
+        vert_nor.push_back(glm::vec3(0, 0, 1));
+    }
+
+    count = vert_idx.size();
+    int vert_count = vert_pos.size();
+
+    bufIdx.create();
+    bufIdx.bind();
+    bufIdx.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    bufIdx.allocate(vert_idx.data(), count * sizeof(GLuint));
+
+    bufPos.create();
+    bufPos.bind();
+    bufPos.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    bufPos.allocate(vert_pos.data(), vert_count * sizeof(glm::vec3));
+
+    bufCol.create();
+    bufCol.bind();
+    bufCol.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    bufCol.allocate(vert_col.data(), vert_count * sizeof(glm::vec3));
+
+    bufNor.create();
+    bufNor.bind();
+    bufNor.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    bufNor.allocate(vert_nor.data(), vert_count * sizeof(glm::vec3));
 
 
-////    Color3f color(colorRNG.nextFloat(), colorRNG.nextFloat(), colorRNG.nextFloat());
+    if (l != nullptr) {
+        l->create();
+    }
+    if (r != nullptr) {
+        r->create();
+    }
+}
 
-////    for(int i = 0; i < CUB_VERT_COUNT; i++){
-////        cub_vert_col[i] = color;
-////    }
+void PoissonBVH::drawAll(MyGL& context, ShaderProgram& s) {
+    if (root != nullptr) {
+        root->draw(context, s);
+    }
+}
 
-////    count = CUB_IDX_COUNT;
-
-//    bufIdx.create();
-//    bufIdx.bind();
-//    bufIdx.setUsagePattern(QOpenGLBuffer::StaticDraw);
-//    bufIdx.allocate(cub_idx, CUB_IDX_COUNT * sizeof(GLuint));
-
-//    bufPos.create();
-//    bufPos.bind();
-//    bufPos.setUsagePattern(QOpenGLBuffer::StaticDraw);
-//    bufPos.allocate(cub_vert_pos,CUB_VERT_COUNT * sizeof(glm::vec3));
-
-//    bufNor.create();
-//    bufNor.bind();
-//    bufNor.setUsagePattern(QOpenGLBuffer::StaticDraw);
-//    bufNor.allocate(cub_vert_nor, CUB_VERT_COUNT * sizeof(glm::vec3));
-
-//    bufCol.create();
-//    bufCol.bind();
-//    bufCol.setUsagePattern(QOpenGLBuffer::StaticDraw);
-//    bufCol.allocate(cub_vert_col, CUB_VERT_COUNT * sizeof(glm::vec3));
-
-//}
+void P_BVHNode::draw(MyGL& context, ShaderProgram& s) {
+    s.draw(context, *this);
+    if (this->l != nullptr) {
+        l->draw(context, s);
+    }
+    if (this->r != nullptr) {
+        r->draw(context, s);
+    }
+}
 
 /**
  * @brief PoissonBVH::buildBVH
@@ -103,8 +170,6 @@ PoissonBVH::PoissonBVH(Mesh& m) : root(new P_BVHNode()) {
  */
 void PoissonBVH::buildBVH(Mesh& m){
     int minNumOfTris = 20;
-
-//    root->bbox = root->buildBoundingBox(m.faces);
 
     // building the whole tree
     root->buildSelfAsChild(m.faces, minNumOfTris);
@@ -167,6 +232,7 @@ void P_BVHNode::buildSelfAsChild(QList<std::shared_ptr<Triangle>>& t, int minNum
  * @return pointer to bounding box encompassing all triangles in the inputted list
  */
 Bounds3f* P_BVHNode::buildBoundingBox(QList<std::shared_ptr<Triangle>>& t) {
+    Bounds3f* b = nullptr;
     for (std::shared_ptr<Triangle> tri: t) {
         Point3f minOfTri(0.0f);
         Point3f maxOfTri(0.0f);
@@ -176,11 +242,13 @@ Bounds3f* P_BVHNode::buildBoundingBox(QList<std::shared_ptr<Triangle>>& t) {
             maxOfTri[i] = glm::max(tri->points[0][i], glm::max(tri->points[1][i], tri->points[2][i]));
         }
 
-        const Bounds3f b = Bounds3f(minOfTri, maxOfTri);
-        return new Bounds3f(b);
+        if (b == nullptr) {
+            b = new Bounds3f(minOfTri, maxOfTri);
+        } else {
+            *b = Union(*b, Union(minOfTri, maxOfTri));
+        }
     }
-
-    return new Bounds3f(); //no triangles so bbox is empty
+    return b;
 }
 
 /**
