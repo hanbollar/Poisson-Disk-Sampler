@@ -44,6 +44,7 @@ private:
     int timeCount;
 
     Scene scene;
+    bool view_PBVH;
 
     QString output_filepath;
 
@@ -72,6 +73,8 @@ public slots:
 
     void slot_poissonClicked();
     void slot_loadPoissonObj();
+
+    void slot_viewPBVH(bool b);
 
 signals:
     void sig_ResizeToCamera(int,int);

@@ -24,11 +24,13 @@ void Scene::SetCamera(const Camera &c)
 
 bool Scene::Intersect(const Ray &ray, Intersection *isect) const
 {
+    glm::mat4 viewProj = camera.GetViewProj();
+
     bool result = false;
     for(Mesh* m : all_mesh){
         for (std::shared_ptr<Triangle> t : m->faces) {
             Intersection testIsect;
-            if(t->Intersect(ray, &testIsect))
+            if(t->Intersect(ray, &testIsect, viewProj))
             {
                 if(testIsect.t < isect->t || isect->t < 0)
                 {

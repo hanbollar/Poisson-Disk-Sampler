@@ -90,13 +90,15 @@ float Triangle::Area() const
     return glm::length(glm::cross(points[0] - points[1], points[2] - points[1])) * 0.5f;
 }
 
-
-//The ray in this function is not transformed because it was *already* transformed in Mesh::GetIntersection
-bool Triangle::Intersect(const Ray& r, Intersection* isect) const
+bool Triangle::Intersect(const Ray& r, Intersection* isect, glm::mat4 viewProj) const
 {
+    //0. Transform to local space
+    Ray localRay = Ray(glm::vec3(/*glm::transpose(viewProj)**/glm::vec4(r.origin, 1)),
+                       /*glm::normalize(*/ glm::vec3(/*glm::transpose(viewProj)**/glm::vec4(r.direction, 0)) /*)*/ );
+
     //1. Ray-plane intersection
-    float t =  glm::dot(planeNormal, (points[0] - r.origin)) / glm::dot(planeNormal, r.direction);
-//    if(t < 0) return false;
+    float t =  glm::dot(planeNormal, (points[0] - localRay.origin)) / glm::dot(planeNormal, localRay.direction);
+    if(t < 0) return false;
 
     glm::vec3 P = r.origin + t * r.direction;
     //2. Barycentric test
@@ -107,6 +109,44 @@ bool Triangle::Intersect(const Ray& r, Intersection* isect) const
     float sum = s1 + s2 + s3;
 
     if(s1 >= 0 && s1 <= 1 && s2 >= 0 && s2 <= 1 && s3 >= 0 && s3 <= 1 && fequal(sum, 1.0f)){
+        isect->t = t;
+        InitializeIntersection(isect, t, Point3f(P));
+        return true;
+    }
+    return false;
+}
+
+bool Triangle::Intersect_PBVH(const Ray& r, Intersection* isect, glm::mat4 viewProj) const
+{
+    //0. Transform to local space
+    Ray localRay = Ray(glm::vec3(/*glm::transpose(viewProj)**/glm::vec4(r.origin, 1)),
+                       /*glm::normalize(*/ glm::vec3(/*glm::transpose(viewProj)**/glm::vec4(r.direction, 0)) /*)*/ );
+
+    //1. Ray-plane intersection
+    /* float denom = normal.dot(ray.direction);
+if (abs(denom) > 0.0001f)
+*/
+    /* (center - ray.origin).dot(normal) / denom */
+
+    float denom = glm::dot(planeNormal, localRay.direction);
+    if (fabs(denom) < 0.000001f) {
+        return false;
+    }
+
+    glm::vec3 center = (points[0] + points[1] + points[2])/3.0f;
+    glm::vec3 dist = center-localRay.origin;
+    float t =  glm::dot(planeNormal, (glm::vec3(glm::abs(dist[0]), glm::abs(dist[1]), glm::abs(dist[2])) ) / denom);
+//    if(t < 0) return false;
+
+    glm::vec3 P = r.origin + t * r.direction;
+    //2. Barycentric test
+    float S = 0.5f * glm::length(glm::cross(points[0] - points[1], points[0] - points[2]));
+    float s1 = 0.5f * glm::length(glm::cross(P - points[1], P - points[2]))/S;
+    float s2 = 0.5f * glm::length(glm::cross(P - points[2], P - points[0]))/S;
+    float s3 = 0.5f * glm::length(glm::cross(P - points[0], P - points[1]))/S;
+    float sum = s1 + s2 + s3;
+
+    if(s1 >= 0 && s1 <= 1 && s2 >= 0 && s2 <= 1 && s3 >= 0 && s3 <= 1 /*&& fequal(sum, 1.0f)*/){
         isect->t = t;
         InitializeIntersection(isect, t, Point3f(P));
         return true;

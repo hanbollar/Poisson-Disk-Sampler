@@ -19,7 +19,8 @@ public:
              const glm::vec2 &t1, const glm::vec2 &t2, const glm::vec2 &t3);
 
 
-    bool Intersect(const Ray &ray, Intersection *isect) const;
+    bool Intersect(const Ray &ray, Intersection *isect, glm::mat4 viewProj) const;
+    bool Intersect_PBVH(const Ray &ray, Intersection *isect, glm::mat4 viewProj) const;
     void InitializeIntersection(Intersection *isect, float t, Point3f pLocal) const;
     void ComputeTBN(const Point3f &P, Normal3f *nor, Vector3f *tan, Vector3f *bit) const;
     Point2f GetUVCoordinates(const Point3f &point) const;

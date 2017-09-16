@@ -33,7 +33,7 @@ public:
     void drawAll(MyGL& context, ShaderProgram& s);
 
     void buildBVH(Mesh& m);
-    bool intersect(Ray &ray, Intersection *isect, int* numIntersections);
+    bool intersect(Ray &ray, Intersection *isect, int* numIntersections, glm::mat4 viewProj);
 };
 
 class P_BVHNode : public Drawable
@@ -64,5 +64,5 @@ public:
                       Bounds3f* leftBox, Bounds3f* rightBox,
                       float outerSA);
 
-    bool intersect(Ray &ray, Intersection *isect, int* numIntersections);
+    bool intersect(Ray &ray, Intersection *isect, int* numIntersections, glm::mat4 viewProj);
 };

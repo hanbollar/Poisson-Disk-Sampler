@@ -62,35 +62,42 @@
            <x>10</x>
            <y>20</y>
            <width>611</width>
-           <height>91</height>
+           <height>96</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
              <string>TextLabel</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QLabel" name="label_13">
             <property name="text">
              <string>TextLabel</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QPushButton" name="poisson">
             <property name="text">
              <string>Poisson</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QPushButton" name="loadPoissonObj">
             <property name="text">
              <string>Load Poisson Obj</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="checkBox_viewBVH">
+            <property name="text">
+             <string>View BVH</string>
             </property>
            </widget>
           </item>
@@ -158,6 +165,7 @@
     <slot>slot_SetMaxBVHPrims(int)</slot>
     <slot>slot_poissonClicked()</slot>
     <slot>slot_loadPoissonObj()</slot>
+    <slot>slot_viewPBVH(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -224,6 +232,22 @@
     <hint type="destinationlabel">
      <x>318</x>
      <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_viewBVH</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>mygl</receiver>
+   <slot>slot_viewPBVH(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>479</x>
+     <y>628</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>295</y>
     </hint>
    </hints>
   </connection>

@@ -350,8 +350,8 @@ void P_BVHNode::splitTheTris(int axis, QList<std::shared_ptr<Triangle>> &t,
  * @param isect - variable to filled in with intersect location if it exists; false, otherwise.
  * @return true if intersects any nodes in the BVH; false, otherwise.
  */
-bool PoissonBVH::intersect(Ray &ray, Intersection *isect, int* numIntersections) {
-    return root->intersect(ray, isect, numIntersections);
+bool PoissonBVH::intersect(Ray &ray, Intersection *isect, int* numIntersections, glm::mat4 viewProj) {
+    return root->intersect(ray, isect, numIntersections, viewProj);
 }
 
 /**
@@ -360,7 +360,7 @@ bool PoissonBVH::intersect(Ray &ray, Intersection *isect, int* numIntersections)
  * @param isect - variable to filled in with intersect location if it exists; false, otherwise.
  * @return true if intersects any nodes in the BVH; false, otherwise.
  */
-bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections) {
+bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections, glm::mat4 viewProj) {
 
     if (this->tris.length() <= 0) { return false; }
 
@@ -374,7 +374,7 @@ bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections) 
             Triangle* tr = triangle.get();
             Intersection* isx_test = new Intersection();
 
-            bool intersects = tr->Intersect(ray, isx_test);
+            bool intersects = tr->Intersect_PBVH(ray, isx_test, viewProj);
 
             if (intersects) {
                 *numIntersections += 1;
@@ -400,9 +400,9 @@ bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections) 
 
     // checking none or single case of box intersection
     if (l_hasIsx && !r_hasIsx) {
-        return l->intersect(ray, isect, numIntersections);
+        return l->intersect(ray, isect, numIntersections, viewProj);
     } else if (!l_hasIsx && r_hasIsx) {
-        return r->intersect(ray, isect, numIntersections);
+        return r->intersect(ray, isect, numIntersections, viewProj);
     } else if (!l_hasIsx && !r_hasIsx) {
         // did not intersect with either of the bboxes
         return false;
@@ -414,8 +414,8 @@ bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections) 
     Intersection* isx_testL = new Intersection();
     Intersection* isx_testR = new Intersection();
 
-    l_hasIsx = l->intersect(ray, isx_testL, numIntersections);
-    r_hasIsx = r->intersect(ray, isx_testR, numIntersections);
+    l_hasIsx = l->intersect(ray, isx_testL, numIntersections, viewProj);
+    r_hasIsx = r->intersect(ray, isx_testR, numIntersections, viewProj);
 
     // checking for recursive bbox-to-triangle intersections
     if (l_hasIsx && !r_hasIsx) {

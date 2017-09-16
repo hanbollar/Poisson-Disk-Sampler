@@ -23,14 +23,15 @@ public:
     Scene s;
     Bounds3f* bbox;
     bool threeDim;
-    glm::vec3 voxelDim;
+    glm::vec3 voxelDim; // number of voxels across each dimension for the grid
+    float maxVoxelSize; //actual size of the voxels [cubes so all 3 same val]
     PoissonBVH* bvh;
 
     Sampler samp;
 
     int numPoints;
 
-    float RADIUS = 0.25f;
+    float RADIUS = 1.0f;
 
     std::vector<std::vector<std::vector<Sample*>>> backgroundGrid3D;
     std::vector<std::vector<Sample*>> backgroundGrid2D;

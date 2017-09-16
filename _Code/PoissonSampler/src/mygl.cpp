@@ -27,7 +27,8 @@ MyGL::MyGL(QWidget *parent)
     : GLWidget277(parent),
       gl_camera(),
       poissonSampler(nullptr), poissonMesh(nullptr),
-      completeSFX(":/include/complete.wav")
+      completeSFX(":/include/complete.wav"),
+      view_PBVH(false)
 
 {
     // Connect the timer to a function so that when the timer ticks the function is executed
@@ -56,6 +57,7 @@ void MyGL::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
+
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     // Set the size with which points should be rendered
@@ -106,15 +108,22 @@ void MyGL::paintGL()
 
 void MyGL::GLDrawScene()
 {
+
     if (poissonSampler == nullptr && poissonMesh != nullptr) {
         prog_lambert.setModelMatrix(glm::mat4(1.0f));
         prog_lambert.draw(*this, *poissonMesh);
     } else if (poissonSampler != nullptr){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         prog_lambert.setModelMatrix(glm::mat4(1.0f));
-        prog_lambert.draw(*this, *poissonSampler);
-        poissonSampler->bvh->drawAll(*this, prog_flat);
+        glDisable(GL_DEPTH_TEST);
+
+        prog_flat.draw(*this, *poissonSampler);
+        if (view_PBVH) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            poissonSampler->bvh->drawAll(*this, prog_flat);
+        }
+
+        glEnable(GL_DEPTH_TEST);
     }
 
 }
@@ -217,5 +226,10 @@ void MyGL::slot_loadPoissonObj() {
     poissonMesh->create();
 
     scene.all_mesh.append(poissonMesh);
+    this->update();
+}
+
+void MyGL::slot_viewPBVH(bool b) {
+    view_PBVH = b;
     this->update();
 }
