@@ -115,7 +115,7 @@ void MyGL::GLDrawScene()
     } else if (poissonSampler != nullptr){
 
         prog_lambert.setModelMatrix(glm::mat4(1.0f));
-        glDisable(GL_DEPTH_TEST);
+       // glDisable(GL_DEPTH_TEST);
 
         prog_flat.draw(*this, *poissonSampler);
         if (view_PBVH) {
@@ -123,7 +123,7 @@ void MyGL::GLDrawScene()
             poissonSampler->bvh->drawAll(*this, prog_flat);
         }
 
-        glEnable(GL_DEPTH_TEST);
+        //glEnable(GL_DEPTH_TEST);
     }
 
 }

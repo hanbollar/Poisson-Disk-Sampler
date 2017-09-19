@@ -8,6 +8,7 @@
 #include "eigen/Eigen/Dense"
 
 #include "poissonbvh.h"
+#include "openGL/drawable.h"
 
 class Sample;
 
@@ -44,8 +45,8 @@ public:
 
     glm::vec3 randomLocAround(glm::vec3 pos);
 
-    GLenum drawMode();
-    void create();
+    virtual GLenum drawMode() const;
+    virtual void create();
 };
 
 class Sample {

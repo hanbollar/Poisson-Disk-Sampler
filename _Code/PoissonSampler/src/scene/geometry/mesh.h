@@ -45,8 +45,9 @@ public:
 class Mesh : public Drawable
 {
 public:
-    void create();
+    virtual void create();
     void LoadOBJ(const QStringRef &filename, const QStringRef &local_path, const Transform& transform);
+    virtual GLenum drawMode() const;
 
     QList<std::shared_ptr<Triangle>> faces;
 };

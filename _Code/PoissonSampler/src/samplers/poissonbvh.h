@@ -27,8 +27,8 @@ public:
 
     P_BVHNode* root;
 
-    void create();  // implemented for Drawable
-    GLenum drawMode();
+    virtual void create();  // implemented for Drawable
+    virtual GLenum drawMode() const;
 
     void drawAll(MyGL& context, ShaderProgram& s);
 
@@ -50,8 +50,8 @@ public:
     P_BVHNode* l;
     P_BVHNode* r;
 
-    void create();
-    GLenum drawMode();
+    virtual void create();
+    virtual GLenum drawMode() const;
     void draw(MyGL& context, ShaderProgram& s);
 
     void buildSelfAsChild(QList<std::shared_ptr<Triangle>>& t, int minNum);

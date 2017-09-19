@@ -30,7 +30,7 @@ void Drawable::destroy()
     bufCol.destroy();
 }
 
-GLenum Drawable::drawMode() const{return GL_TRIANGLES;}
+//GLenum Drawable::drawMode() const{ return GL_TRIANGLES;}
 int Drawable::elemCount(){return count;}
 bool Drawable::bindIdx(){return bufIdx.bind();}
 bool Drawable::bindPos(){return bufPos.bind();}

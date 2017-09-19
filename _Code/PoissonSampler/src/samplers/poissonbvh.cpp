@@ -4,11 +4,11 @@ PoissonBVH::PoissonBVH(Mesh& m) : root(new P_BVHNode()) {
     buildBVH(m);
 }
 
-GLenum PoissonBVH::drawMode() {
+GLenum PoissonBVH::drawMode() const {
     return GL_LINES;
 }
 
-GLenum P_BVHNode::drawMode() {
+GLenum P_BVHNode::drawMode() const {
     return GL_LINES;
 }
 

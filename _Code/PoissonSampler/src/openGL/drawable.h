@@ -22,7 +22,7 @@ public:
                                 //It has no base implementation. It is analogous to an abstract function in Java.
 
     virtual void destroy();     //This is a virtual function; it MAY be overridden by a subclass of Drawable, but it has a base implementation.
-    virtual GLenum drawMode() const;
+    virtual GLenum drawMode() const = 0;
 
     int elemCount();
     bool bindIdx();

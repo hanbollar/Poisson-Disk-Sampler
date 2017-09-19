@@ -8,7 +8,7 @@ PoissonSampler::PoissonSampler(Mesh &mesh, Scene &scene, bool isThreeDim)
     poissonAlg();
 }
 
-GLenum PoissonSampler::drawMode() {
+GLenum PoissonSampler::drawMode() const {
     return GL_POINTS;
 }
 

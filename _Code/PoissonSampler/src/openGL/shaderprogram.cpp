@@ -68,6 +68,7 @@ void ShaderProgram::draw(GLWidget277 &f, Drawable &d)
     // Bind the index buffer and then draw shapes from it.
     // This invokes the shader program, which accesses the vertex buffers.
     d.bindIdx();
+    d.drawMode(); // for testing
     f.glDrawElements(d.drawMode(), d.elemCount(), GL_UNSIGNED_INT, 0);
 
     if (attrPos != -1) prog.disableAttributeArray(attrPos);

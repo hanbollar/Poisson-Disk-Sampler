@@ -207,6 +207,10 @@ void Mesh::LoadOBJ(const QStringRef &filename, const QStringRef &local_path, con
     }
 }
 
+GLenum Mesh::drawMode() const {
+    return GL_TRIANGLES;
+}
+
 void Mesh::create(){
     //Count the number of vertices for each face so we can get a count for the entire mesh
         std::vector<glm::vec3> vert_pos;
