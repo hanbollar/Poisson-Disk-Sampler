@@ -23,7 +23,7 @@ while the number of active samples > 0
 	Pick a random sample x_i from the list of active samples
 	Randomly sample K more locations within the R to 2R distance around x_i's location
 	for each of these K random samples
-		if the sample is in a location that is less than R distance away to any other sample on the grid:
+		if the sample is not less than R distance away to any other sample on the grid:
 			it is not a valid sample
 		otherwise it is a valid sample:
 			add it to the active samples list and to the background grid
