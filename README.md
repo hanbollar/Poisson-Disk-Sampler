@@ -15,8 +15,8 @@ Dunbar and Humphrey's paper describes an improved implementation of Poisson samp
 As Bridson's previously linked paper delineates, his algorithm easily extends to n-dimensions while still running in O(N) time to generate the requested N Poisson Disk Samples [aka running proportional to the number of requested samples]. Additionally, in contrast with Dunbar and Humphrey's approach, once the samples are picked from the appropriate region, Bridson's algorithm uses rejection sampling [when an existing valid sample no longer has any other new/valid samples within its valid sample range it is no longer a valid sample] instead of using the clear-cut restrictions to compute the allowed sampling region. This is beneficial as it allows the sampling to develop more organically thus reducing the chaotic-ness of the random selection, speeding up the process as a whole.
 
 ### The Poisson Algorithm:
- 
-' ' '
+
+```
 Select an initial location to create the first sample s.t. it is within the given bounds. 
 Add this to the grid and list of active samples
 while the number of active samples > 0
@@ -30,7 +30,7 @@ while the number of active samples > 0
 	if no samples were added from the K samples chosen for this x_i sample:
 		x_i is now a permanent sample so it is removed from the active sample listing
 The final created background grid contains all valid samples as defined by the R to 2R restrictions
-' ' '
+```
 
 ### My Implementation:
 
