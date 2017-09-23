@@ -61,9 +61,9 @@ void MyGL::initializeGL()
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     // Set the size with which points should be rendered
-    glPointSize(5);
+    glPointSize(3);
     // Set the color with which the screen is filled at the start of each render call.
-    glClearColor(0.5, 0.5, 0.5, 1);
+    glClearColor(0.2, 0.2, 0.2, 1);
 
     printGLErrorLog();
 
@@ -108,22 +108,16 @@ void MyGL::paintGL()
 
 void MyGL::GLDrawScene()
 {
+    prog_lambert.setModelMatrix(glm::mat4(1.0f));
 
     if (poissonSampler == nullptr && poissonMesh != nullptr) {
-        prog_lambert.setModelMatrix(glm::mat4(1.0f));
         prog_lambert.draw(*this, *poissonMesh);
     } else if (poissonSampler != nullptr){
 
-        prog_lambert.setModelMatrix(glm::mat4(1.0f));
-       // glDisable(GL_DEPTH_TEST);
-
         prog_flat.draw(*this, *poissonSampler);
         if (view_PBVH) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             poissonSampler->bvh->drawAll(*this, prog_flat);
         }
-
-        //glEnable(GL_DEPTH_TEST);
     }
 
 }
@@ -201,6 +195,8 @@ void MyGL::slot_poissonClicked() {
         poissonSampler->bvh->create();
         std::cout<<"numSamples:"<<poissonSampler->numPoints<<std::endl;
     }
+
+    this->update();
 }
 
 void MyGL::slot_loadPoissonObj() {

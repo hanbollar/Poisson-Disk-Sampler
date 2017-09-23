@@ -1,10 +1,10 @@
 #include "poissonsampler.h"
 
 PoissonSampler::PoissonSampler(Mesh &mesh, Scene &scene, bool isThreeDim)
-    : m(mesh), s(scene), bvh(nullptr), bbox(nullptr),
+    : m(mesh), s(scene), bvh(nullptr), bbox(nullptr), finalSamples(0, nullptr),
         threeDim(isThreeDim), voxelDim(glm::vec3(0.0f)), numPoints(0), samp(5, 5) {
 
-    initializeBackgroundGridsandBVH();
+    initializeVarsAndBVH();
     poissonAlg();
 }
 
@@ -19,44 +19,8 @@ void PoissonSampler::create() {
     //  pos vec3s
     std::vector<glm::vec3> posVector;
 
-    int i=0;
-    int j=0;
-    int k=0;
-
-    this->numPoints = 0;
-
-    if (threeDim) {
-        while (i<backgroundGrid3D.size()) {
-            while (j<(backgroundGrid3D[i]).size()) {
-                while (k<(backgroundGrid3D[i][j]).size()) {
-
-                    if (backgroundGrid3D[i][j][k]!= nullptr) {
-                        posVector.push_back((backgroundGrid3D[i][j][k])->pos);
-
-                        numPoints += 1;
-                    }
-
-                    k++;
-                }
-                j++;
-            }
-            i++;
-        }
-    } else {
-        while (i<backgroundGrid3D.size()) {
-            while (j<backgroundGrid3D[i].size()) {
-
-                if (backgroundGrid2D[i][j]!= nullptr) {
-                    posVector.push_back((backgroundGrid2D[i][j])->pos);
-                    numPoints += 1;
-                }
-
-
-
-                j++;
-            }
-            i++;
-        }
+    for (Sample* s: finalSamples ){
+        posVector.push_back(s->pos);
     }
 
     std::cout<<"-----------------numPoints: "<<numPoints<<std::endl;
@@ -67,11 +31,11 @@ void PoissonSampler::create() {
     glm::vec3 points_vert_col[numPoints];
 
     glm::vec3 color2 = glm::vec3(200.0f, 230.0f, 255.0f) / 255.0f; //yellow
-    glm::vec3 color3 = glm::vec3(1.0f, 0.0f, 0.0f); //red
+    glm::vec3 color3 = glm::vec3(0.0f, 0.0f, 1.0f); //blue
     for (int p = 0; numPoints!=0 && p<numPoints; p++) {
         float lerpWeight = p/(1.0f*numPoints);
 
-        points_vert_col[p] = color3; /*(color2*lerpWeight + (1-lerpWeight)*color3); */
+        points_vert_col[p] = (color2*lerpWeight + (1-lerpWeight)*color3);
         points_vert_nor[p] = glm::vec3(0, 0, 1);
         points_idx[p] = p;
         points_vert_pos[p] = posVector[p];
@@ -107,28 +71,26 @@ void PoissonSampler::poissonAlg(){
     // set up pointer list of valid samples
     std::vector<Sample*> activeValidSamples(0, nullptr);
 
+    std::vector<std::vector<std::vector<Sample*>>> backgroundGrid
+            = std::vector<std::vector<std::vector<Sample*>>>(
+                                           voxelDim[0],
+                                           std::vector<std::vector<Sample*>>(voxelDim[1],
+                                                                             std::vector<Sample*>(voxelDim[2], nullptr)
+                                                                             )
+                                    );
+
     // choose random sample loc from grid - make sure valid in the obj & add to active list & background grid
     // implement this part by doing actual pos of object instead of rand location in obj and just having the alg
     //      breaking out from there [since can only do linear transformations on obj - must be valid pos in the obj]
 
-    std::cout<<"here1"<<std::endl;
-    glm::vec3 tloc = m.faces.first().get()->points[0];
-    std::cout<<"here2"<<std::endl;
-    std::cout<<"position of first vertex:"<<tloc.x<<","<<tloc.y<<","<<tloc.z<<","<<std::endl;
-    std::cout<<"here3"<<std::endl;
     glm::vec3 randGridLoc = posToGridLoc(m.faces.first().get()->points[0]);
     Sample* start = new Sample(randGridLoc, m.transform.position(), 0);
     activeValidSamples.push_back(start);
 
-    if (threeDim) {
-        std::cout<<"randGridLoc:"<<randGridLoc[0]<<","<<randGridLoc[1]<<","<<randGridLoc[2]<<std::endl;
-        backgroundGrid3D[randGridLoc[0]][randGridLoc[1]][randGridLoc[2]] = start;
-    } else {
-        backgroundGrid2D[randGridLoc[0]][randGridLoc[1]] = start;
-    }
+    backgroundGrid[randGridLoc[0]][randGridLoc[1]][(threeDim) ? randGridLoc[2] : 0] = start;
 
     // number of samples tested at each x_i in the while loop [kept constant]
-    int K = 10;
+    int K = 100;
 
     std::cout<<"poissonSampler::poissonAlg beginning the while loop"<<std::endl;
 
@@ -142,129 +104,80 @@ void PoissonSampler::poissonAlg(){
     //      } if after all checked and no k were added --> remove x_i from active list
     // return completed list of samples
     while(activeValidSamples.size() > 0) {
-        float abTest = samp.Get2D().x;
 
-        Sample* x_i = activeValidSamples[(int)(abTest * activeValidSamples.size())];
-        std::cout<<"sample x_i pos: "<<x_i->pos[0]<<","<<x_i->pos[1]<<","<<x_i->pos[2]<<std::endl;
+        Sample* x_i = activeValidSamples[(int)( samp.Get2D().x * activeValidSamples.size())];
+//        std::cout<<"x_i gridpos: "<<x_i->gridLoc[0]<<","<<x_i->gridLoc[1]<<","<<x_i->gridLoc[2]<<std::endl;
+        std::cout<</*"sample x_i pos: "<<x_i->pos[0]<<","<<x_i->pos[1]<<","<<x_i->pos[2]<<*/": active: "<<activeValidSamples.size()<<": finished: "<<finalSamples.size()<<std::endl;
+
         bool addedK = false;
         for (int i=0; i<K; i++) {
             glm::vec3 pos = randomLocAround(x_i->pos);
-            std::cout<<"---------------------------"<<std::endl;
-            std::cout<<"on item: i:"<<i<<" <K:"<<K<<" loc:"<<pos[0]<<","<<pos[1]<<","<<pos[2]<<std::endl;
 
             //note must make sure ^^ provides valid position that will be within the current grid area so sampling must check that first
             glm::vec3 gLoc = posToGridLoc(pos);
-            std::cout<<"gridLoc: "<<gLoc[0]<<","<<gLoc[1]<<","<<gLoc[2]<<std::endl;
 
             // find collection of samples to test untested sample against so not testing against every single one
             // since testing within R to 2R radius and the boxes are bounded by that can just look for all 8 boxes
             //      around current gridP location
-            glm::vec3 checkingMin = gLoc - 2 * RADIUS; //voxel checks
-            glm::vec3 checkingMax = gLoc + 2 * RADIUS; //voxel checks
 
-            checkingMin = glm::vec3(glm::clamp(checkingMin[0], 0.0f, voxelDim[0] - 1),
-                                    glm::clamp(checkingMin[1], 0.0f, voxelDim[1] - 1),
-                                    glm::clamp(checkingMin[2], 0.0f, voxelDim[2] - 1) );
-            checkingMax = glm::vec3(glm::clamp(checkingMax[0], 0.0f, voxelDim[0] - 1),
-                                    glm::clamp(checkingMax[1], 0.0f, voxelDim[1] - 1),
-                                    glm::clamp(checkingMax[2], 0.0f, voxelDim[2] - 1) );
+            glm::vec3 min = bbox->min;
 
+            glm::vec3 div = glm::vec3(voxelDim)/RADIUS;
+            float factor = 4;
+            glm::vec3 checkingMin(0.0f);
+            glm::vec3 checkingMax(0.0f);
+            for (int j=0; j<3; j++) {
+                checkingMin[j] = pos[j] - factor*div[j];
+                checkingMax[j] = pos[j] + factor*div[j];
+            }
+            checkingMin = posToGridLoc(checkingMin);
+            checkingMax = posToGridLoc(checkingMax);
 
             bool valid = true;
-
             for (int j = checkingMin[0]; j <= checkingMax[0]; j++) {
                 for (int k = checkingMin[1]; k <= checkingMax[1]; k++) {
-                    for(int l = checkingMin[2]; l <= checkingMax[2] && threeDim; l++) {
+                    for(int l = checkingMin[2]; l <= checkingMax[2]; l++) {
 
-
-
-                        if (backgroundGrid3D[j][k][l] != nullptr) {
+                        if (backgroundGrid[j][k][l] != nullptr) {
                             if (j == gLoc[0] && k == gLoc[1] && l == gLoc[2]) {
                                 valid = false;
-                                std::cout<<"isValid: "<<false<<std::endl;
+//                                std::cout<<"not valid bc same loc as x_i"<<std::endl;
                             }
 
-                            bool isValid = (glm::distance(gLoc, x_i->gridLoc) >= RADIUS && (glm::distance(gLoc, x_i->gridLoc) <= 2*RADIUS));
-//                            std::cout<<"valid before isValid: "<<valid<<std::endl;
-//                            std::cout<<"isValid: "<<isValid<<std::endl;
-                            valid &= isValid;
-//                            std::cout<<"valid after isValid: "<<valid<<std::endl;
-                        } else {
-//                            std::cout<<"skipped gloc: "<<j<<","<<k<<","<<l<<std::endl;
+                            valid &= (glm::distance(pos, x_i->pos) >= RADIUS && (glm::distance(pos, x_i->pos) <= 2*RADIUS));
+//                            std::cout<<"valid: "<<valid<<" because of grid distance check"<<std::endl;
                         }
                     }
-
-//                    if (!threeDim && backgroundGrid2D[j][k] != nullptr) {
-//                        bool isValid = (glm::distance(gLoc, x_i->gridLoc) >= RADIUS && (glm::distance(gLoc, x_i->gridLoc) <= 2*RADIUS));
-//                        std::cout<<"isValid: "<<isValid<<std::endl;
-//                        valid &= isValid;
-//                    } else if (!threeDim && (j == gLoc[0] && k == gLoc[1])) {
-//                        valid = false;
-//                        std::cout<<"isValid: "<<false<<std::endl;
-//                    }
-                    // TO COMPLETE TO COMPLET TO COMPLETE FOR 2d
-
                 }//end: for (int j = checkingMin[1]; j < checkingMax[1]; j++);
             }//end: for (int i = checkingMin[0]; i < checkingMax[0]; i++);
 
-            // have all valid locations but not valid within obj -- NEED TO RESOLVE
-
-//            std::cout<<std::endl;
-//            std::cout<<"valid based on grid around: "<<valid<<std::endl;
-//            std::cout<<"validLocWithinObj(pos): "<<validLocWithinObj(pos)<<": for pos:"<<pos[0]<<","<<pos[1]<<","<<pos[2]<<std::endl;
-//            std::cout<<std::endl;
-
+//             std::cout<<"    valid in Grid at loc:"<<gLoc[0]<<","<<gLoc[1]<<","<<gLoc[2]<<": "<<valid<<" valid in Obj: "<<validLocWithinObj(pos)<<" at pos: "<<pos[0]<<","<<pos[1]<<","<<pos[2]<<std::endl;
             if (valid && validLocWithinObj(pos)) {
-
+//                std::cout<<"        added"<<std::endl;
                 // valid then create and add to grid
-                int id = activeValidSamples.size() + i;
-                Sample* kPoint = new Sample(gLoc, pos, id);
+                Sample* kPoint = new Sample(gLoc, pos, activeValidSamples.size() + i);
 
                 activeValidSamples.push_back(kPoint);
-
-                if (threeDim) {
-                    if (backgroundGrid3D[gLoc[0]][gLoc[1]][gLoc[2]] != nullptr) {
-                        throw;
-                    }
-                    backgroundGrid3D[gLoc[0]][gLoc[1]][gLoc[2]] = kPoint;
-                } else {
-                    backgroundGrid2D[gLoc[0]][gLoc[1]] = kPoint;
-                }
+                backgroundGrid[gLoc[0]][gLoc[1]][gLoc[2]] = kPoint;
 
                 addedK = true;
-
-                std::cout<<"added location from this sample"<<std::endl;
             }
 
         }// end: for (int i=0; i<K; i++);
 
         if (!addedK) {
 
-            //none of x_i's newly created samples were added so x_i no longer a valid sample
+            //none of x_i's newly created samples were added so x_i no longer a valid active sample - add to list of final samples
+            finalSamples.push_back(new Sample(x_i));
+            numPoints += 1;
             activeValidSamples.erase(std::remove(activeValidSamples.begin(), activeValidSamples.end(), x_i),
                                      activeValidSamples.end());
 
-            std::cout<<"did not add any from this sample"<<std::endl;
         }
-
-        std::cout<<"poissonSampler::poissonAlg while(activeValidSamples.size() > 0 -- the sample size: "<<activeValidSamples.size()<<std::endl;
 
     } //end: while(activeValidSamples.size() > 0)
 
     std::cout<<"poissonSampler::poissonAlg finished"<<std::endl;
-
-}
-
-glm::vec3 PoissonSampler::randomLocAround(glm::vec3 pos) {
-    float x = samp.Get2D().x * 10 * maxVoxelSize;
-    float y = samp.Get2D().x * 10 * maxVoxelSize;
-    float z = samp.Get2D().x * 10 * maxVoxelSize;
-
-    x = (x > maxVoxelSize/5.0f) ? pos[0] + x : pos[0] - x;
-    y = (y > maxVoxelSize/5.0f) ? pos[1] + y : pos[1] - y;
-    z = (z > maxVoxelSize/5.0f) ? pos[2] + z : pos[2] - z;
-
-    return glm::vec3(x, y, z);
 }
 
 /**
@@ -273,15 +186,14 @@ glm::vec3 PoissonSampler::randomLocAround(glm::vec3 pos) {
  * set up background grid
  * for now grid dimensions based entirely on const radius as declared.
  */
-void PoissonSampler::initializeBackgroundGridsandBVH() {
+void PoissonSampler::initializeVarsAndBVH() {
     // grid dim: RADIUS/(dim_n)^1/2 --> bigger r is bigger voxels is fewer samples
 
     std::cout<<"poissonSampler::initializeBackgroundGridsandBVH"<<std::endl;
 
-    int nDim = 3;
-    if (!threeDim) { nDim = 2; }
+    int nDim = (threeDim) ? 3 : 2;
 
-    maxVoxelSize = RADIUS/(nDim*nDim);
+    maxVoxelSize = RADIUS/((nDim*nDim)/*^(1/2)*/);
     bvh = new PoissonBVH(m);
     bbox = bvh->root->bbox;
 
@@ -292,18 +204,26 @@ void PoissonSampler::initializeBackgroundGridsandBVH() {
                                glm::ceil((maxP[1] - minP[1])/maxVoxelSize),
                                glm::ceil((maxP[2] - minP[2])/maxVoxelSize) );
 
-    this->backgroundGrid3D = std::vector<std::vector<std::vector<Sample*>>>(
-                                   voxelDim[0],
-                                   std::vector<std::vector<Sample*>>(voxelDim[1],
-                                                                     std::vector<Sample*>(voxelDim[2], nullptr)
-                                                                     )
-                             );
-    this->backgroundGrid2D = std::vector<std::vector<Sample*>>(
-                                   voxelDim[0],
-                                   std::vector<Sample*>(voxelDim[1])
-                             );
-
     std::cout<<"poissonSampler::initializeBackgroundGridsandBVH finished"<<std::endl;
+}
+
+/**
+ * @brief PoissonSampler::randomLocAround
+ * @param pos
+ * @return
+ */
+glm::vec3 PoissonSampler::randomLocAround(glm::vec3 pos) {
+    float val = 3.0f;
+    float x = samp.Get2D().x * val * RADIUS;
+    float y = samp.Get2D().x * val * RADIUS;
+    float z = samp.Get2D().x * val * RADIUS;
+
+    float factor = RADIUS * val/2.0f;
+    x = (x > factor) ? pos[0] + x : pos[0] - x;
+    y = (y > factor) ? pos[1] + y : pos[1] - y;
+    z = (z > factor) ? pos[2] + z : pos[2] - z;
+
+    return glm::vec3(x, y, z);
 }
 
 /**
@@ -319,16 +239,11 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
 
     glm::vec3 min = bbox->min;
 
-    if (threeDim) {
-        return glm::vec3((int)(glm::clamp(((p[0] - min[0])/maxVoxelSize), 0.0f, voxelDim[0] - 1)),
-                         (int)(glm::clamp(((p[1] - min[1])/maxVoxelSize), 0.0f, voxelDim[1] - 1)),
-                         (int)(glm::clamp(((p[2] - min[2])/maxVoxelSize), 0.0f, voxelDim[2] - 1)) );
-    }
+    int x = (int)(glm::clamp(((p[0] - min[0])/RADIUS), 0.0f, voxelDim[0] - 1));
+    int y = (int)(glm::clamp(((p[1] - min[1])/RADIUS), 0.0f, voxelDim[1] - 1));
+    int z = (threeDim) ? (int)(glm::clamp(((p[2] - min[2])/RADIUS), 0.0f, voxelDim[2] - 1)) : 0;
 
-    return glm::vec3((int)(glm::clamp(((p[0] - min[0])/maxVoxelSize), 0.0f, voxelDim[0] - 1)),
-                     (int)(glm::clamp(((p[1] - min[1])/maxVoxelSize), 0.0f, voxelDim[1] - 1)),
-                     0.0f ); //since grid is 2d version dont want to worry about unnecessary dividing.
-
+    return glm::vec3(x, y, z);
 }
 
 /**
@@ -338,6 +253,8 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
  */
 bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
 
+//    return (p.x > bbox->min[0] && p.y > bbox->min[1] && p.z > bbox->min[2]
+//            && p.x < bbox->max[0] && p.y < bbox->max[1] && p.z < bbox->max[2]);
     if (threeDim) {
 
         int numIsx = 0;

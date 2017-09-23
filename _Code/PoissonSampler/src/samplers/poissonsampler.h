@@ -17,7 +17,7 @@ class PoissonSampler : public Drawable
 public:
     //assuming only inputting primitives in scene that ALL need to be filled
     PoissonSampler(Mesh& mesh, Scene& scene, bool isThreeDim);
-    ~PoissonSampler() { backgroundGrid3D.clear(); backgroundGrid2D.clear(); }
+    ~PoissonSampler() { finalSamples.clear(); delete bvh; delete bbox;}
 
     // all variables below are initialized in the constructor's list
     Mesh m;
@@ -29,15 +29,12 @@ public:
     PoissonBVH* bvh;
 
     Sampler samp;
-
     int numPoints;
+    float RADIUS = 0.2f;
 
-    float RADIUS = 1.0f;
+    std::vector<Sample*> finalSamples;
 
-    std::vector<std::vector<std::vector<Sample*>>> backgroundGrid3D;
-    std::vector<std::vector<Sample*>> backgroundGrid2D;
-
-    void initializeBackgroundGridsandBVH();
+    void initializeVarsAndBVH();
     void poissonAlg();
 
     glm::vec3 posToGridLoc(glm::vec3 p);
@@ -53,6 +50,8 @@ class Sample {
     public:
         Sample(glm::vec3 gLoc, glm::vec3 wPos, int gId)
             : gridLoc(gLoc), pos(wPos), id(gId) {}
+        Sample(Sample* s)
+            : gridLoc(s->gridLoc), pos(s->pos), id(s->id) {}
         ~Sample();
 
         glm::vec3 pos;
