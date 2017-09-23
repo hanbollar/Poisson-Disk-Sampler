@@ -34,6 +34,6 @@ The final created background grid contains all valid samples as defined by the R
 
 ### My Implementation:
 
-- My implementation is almost exactly like the below algorithm except to speed up the number of mesh queries from the total number of possible samples including those that arent ultimately saved, I switched to just building the poisson samples relative to the objects overall bounding box and checking those final created samples against the mesh itself. This shortens the number of mesh queries to just being the same as the number of final samples created.
+- My implementation is almost exactly like the above algorithm except to speed up the number of mesh queries from the total number of possible samples including those that arent ultimately saved, I switched to just building the poisson samples relative to the objects overall bounding box and checking those final created samples against the mesh itself. This shortens the number of mesh queries to just being the same as the number of final samples created.
 - BVH structure to speed up mesh checking for if a sample lies properly within the object.
 - 2D/3D background grid used for allocation and speeding up search for nearby samples within the Radius and 2*Radius restriction.
