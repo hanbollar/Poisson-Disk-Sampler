@@ -45,6 +45,7 @@ private:
 
     Scene scene;
     bool view_PBVH;
+    bool view_OBJ;
 
     QString output_filepath;
 
@@ -75,6 +76,7 @@ public slots:
     void slot_loadPoissonObj();
 
     void slot_viewPBVH(bool b);
+    void slot_viewOBJ(bool b);
 
 signals:
     void sig_ResizeToCamera(int,int);

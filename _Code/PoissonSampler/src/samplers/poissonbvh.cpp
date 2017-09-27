@@ -362,7 +362,7 @@ bool PoissonBVH::intersect(Ray &ray, Intersection *isect, int* numIntersections,
  */
 bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections, glm::mat4 viewProj) {
 
-    if (this->tris.length() <= 0) { return false; }
+//    if (this->tris.length() <= 0) { return false; }
 
     if (l == nullptr && r == nullptr) {
         // hit leaf node
@@ -379,22 +379,17 @@ bool P_BVHNode::intersect(Ray &ray, Intersection *isect, int* numIntersections, 
             if (intersects) {
                 *numIntersections += 1;
 
+                isect = (isect == nullptr) ? isx_test : ( (isx_test->t < isect->t) ? isx_test : isect );
                 hit = true;
-                if (isect == nullptr) {
-                    isect = isx_test;
-                } else {
-                    isect = (isx_test->t < isect->t) ? isx_test : isect;
-                }
             }
         }
-
         return hit;
 
     } else if ((l == nullptr && r != nullptr) || (l!= nullptr && r == nullptr))
         { std::cout<<"error in P_BVHNode intersect childNodes not proper [ie have exactly one child node]"<<std::endl; throw; }
 
-    float* t_intersectL = nullptr;
-    float* t_intersectR = nullptr;
+    float* t_intersectL = new float();
+    float* t_intersectR = new float();
     bool l_hasIsx = l->bbox->Intersect(ray, t_intersectL);
     bool r_hasIsx = r->bbox->Intersect(ray, t_intersectR);
 

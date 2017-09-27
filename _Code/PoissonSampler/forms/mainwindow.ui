@@ -62,14 +62,21 @@
            <x>10</x>
            <y>20</y>
            <width>611</width>
-           <height>96</height>
+           <height>99</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
              <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="checkBox_viewBVH">
+            <property name="text">
+             <string>View BVH</string>
             </property>
            </widget>
           </item>
@@ -80,13 +87,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="poisson">
-            <property name="text">
-             <string>Poisson</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QPushButton" name="loadPoissonObj">
             <property name="text">
@@ -94,10 +94,20 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QCheckBox" name="checkBox_viewBVH">
+          <item row="2" column="0">
+           <widget class="QPushButton" name="poisson">
             <property name="text">
-             <string>View BVH</string>
+             <string>Poisson</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="checkBox_viewOBJ">
+            <property name="text">
+             <string>View OBJ</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -166,6 +176,8 @@
     <slot>slot_poissonClicked()</slot>
     <slot>slot_loadPoissonObj()</slot>
     <slot>slot_viewPBVH(bool)</slot>
+    <slot>slot_changedRadius(double)</slot>
+    <slot>slot_viewOBJ(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -244,6 +256,22 @@
     <hint type="sourcelabel">
      <x>479</x>
      <y>628</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_viewOBJ</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>mygl</receiver>
+   <slot>slot_viewOBJ(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>479</x>
+     <y>669</y>
     </hint>
     <hint type="destinationlabel">
      <x>318</x>

@@ -90,7 +90,7 @@ void PoissonSampler::poissonAlg(){
     backgroundGrid[randGridLoc[0]][randGridLoc[1]][(threeDim) ? randGridLoc[2] : 0] = start;
 
     // number of samples tested at each x_i in the while loop [kept constant]
-    int K = 100;
+    int K = 50;
 
     std::cout<<"poissonSampler::poissonAlg beginning the while loop"<<std::endl;
 
@@ -119,8 +119,6 @@ void PoissonSampler::poissonAlg(){
             // find collection of samples to test untested sample against so not testing against every single one
             // since testing within R to 2R radius and the boxes are bounded by that can just look for all 8 boxes
             //      around current gridP location
-
-            glm::vec3 min = bbox->min;
 
             glm::vec3 div = glm::vec3(voxelDim)/RADIUS;
             float factor = 4;
@@ -253,35 +251,31 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
  */
 bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
 
-//    return (p.x > bbox->min[0] && p.y > bbox->min[1] && p.z > bbox->min[2]
+//    bool withinBox = (p.x > bbox->min[0] && p.y > bbox->min[1] && p.z > bbox->min[2]
 //            && p.x < bbox->max[0] && p.y < bbox->max[1] && p.z < bbox->max[2]);
     if (threeDim) {
+
+        int numIsx = 0;
+        Intersection isx = Intersection();
+        Ray r = Ray(p, glm::vec3(1.0f, 1.0f, 1.0f)); // can pick any direction since if in mesh will have odd num isx, even otherwise
+
+//        bvh->intersect(r, &isx, &numIsx, s.camera.GetViewProj());
+        bool intersects = bvh->intersect(r, &isx, &numIsx, s.camera.GetViewProj());
+        if (intersects) {
+
+            return (numIsx %2 == 0) ? false : true;
+        }
+    } /*else {
 
         int numIsx = 0;
         Intersection isx = Intersection();
         Ray r = Ray(s.camera.eye, glm::normalize(s.camera.eye - p));
 
         if (bvh->intersect(r, &isx, &numIsx, s.camera.GetViewProj())) {
-            return (numIsx %2 == 0) ? false : true;
+            if (!withinBox) { std::cout<<"numIsx: "<<numIsx<<std::endl; }
+
+            return (numIsx % 2 == 0) ? false : true;
         }
-    }
-
-    // else: 2dim
-
-//         to check if within for 2d then first check at proper z loc
-//         and just check if x and y are within appropriate bounds2f for it
-
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-    /** TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE TO COMPLETE **/
-
+    }*/
     return false;
 }

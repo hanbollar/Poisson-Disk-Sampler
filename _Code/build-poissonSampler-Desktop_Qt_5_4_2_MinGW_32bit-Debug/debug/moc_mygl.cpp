@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MyGL_t {
-    QByteArrayData data[9];
-    char stringdata[108];
+    QByteArrayData data[10];
+    char stringdata[121];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,12 +37,14 @@ QT_MOC_LITERAL(4, 40, 11), // "timerUpdate"
 QT_MOC_LITERAL(5, 52, 19), // "slot_poissonClicked"
 QT_MOC_LITERAL(6, 72, 19), // "slot_loadPoissonObj"
 QT_MOC_LITERAL(7, 92, 13), // "slot_viewPBVH"
-QT_MOC_LITERAL(8, 106, 1) // "b"
+QT_MOC_LITERAL(8, 106, 1), // "b"
+QT_MOC_LITERAL(9, 108, 12) // "slot_viewOBJ"
 
     },
     "MyGL\0sig_ResizeToCamera\0\0sig_DisableGUI\0"
     "timerUpdate\0slot_poissonClicked\0"
-    "slot_loadPoissonObj\0slot_viewPBVH\0b"
+    "slot_loadPoissonObj\0slot_viewPBVH\0b\0"
+    "slot_viewOBJ"
 };
 #undef QT_MOC_LITERAL
 
@@ -52,7 +54,7 @@ static const uint qt_meta_data_MyGL[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -60,14 +62,15 @@ static const uint qt_meta_data_MyGL[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   44,    2, 0x06 /* Public */,
-       3,    1,   49,    2, 0x06 /* Public */,
+       1,    2,   49,    2, 0x06 /* Public */,
+       3,    1,   54,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   52,    2, 0x08 /* Private */,
-       5,    0,   53,    2, 0x0a /* Public */,
-       6,    0,   54,    2, 0x0a /* Public */,
-       7,    1,   55,    2, 0x0a /* Public */,
+       4,    0,   57,    2, 0x08 /* Private */,
+       5,    0,   58,    2, 0x0a /* Public */,
+       6,    0,   59,    2, 0x0a /* Public */,
+       7,    1,   60,    2, 0x0a /* Public */,
+       9,    1,   63,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
@@ -77,6 +80,7 @@ static const uint qt_meta_data_MyGL[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,    8,
     QMetaType::Void, QMetaType::Bool,    8,
 
        0        // eod
@@ -93,6 +97,7 @@ void MyGL::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
         case 3: _t->slot_poissonClicked(); break;
         case 4: _t->slot_loadPoissonObj(); break;
         case 5: _t->slot_viewPBVH((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 6: _t->slot_viewOBJ((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -138,13 +143,13 @@ int MyGL::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

@@ -314,7 +314,7 @@ release/moc_mainwindow.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QMai
 		../PoissonSampler/src/cameracontrolshelp.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QWidget \
 		../PoissonSampler/src/mainwindow.h
-	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\mainwindow.h -o release\moc_mainwindow.cpp
+	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\mainwindow.h -o release\moc_mainwindow.cpp
 
 release/moc_mygl.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLVertexArrayObject \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qopenglvertexarrayobject.h \
@@ -782,7 +782,7 @@ release/moc_mygl.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLVertexA
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QStringRef \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/QFile \
 		../PoissonSampler/src/mygl.h
-	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\mygl.h -o release\moc_mygl.cpp
+	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\mygl.h -o release\moc_mygl.cpp
 
 release/moc_glwidget277.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QOpenGLWidget \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qopenglwidget.h \
@@ -905,7 +905,7 @@ release/moc_glwidget277.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QOp
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qtimer.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore/qbasictimer.h \
 		../PoissonSampler/src/openGL/glwidget277.h
-	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\openGL\glwidget277.h -o release\moc_glwidget277.cpp
+	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\openGL\glwidget277.h -o release\moc_glwidget277.cpp
 
 release/moc_cameracontrolshelp.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QWidget \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qwidget.h \
@@ -1010,7 +1010,7 @@ release/moc_cameracontrolshelp.cpp: C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidg
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qvector2d.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qtouchdevice.h \
 		../PoissonSampler/src/cameracontrolshelp.h
-	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/P0-PoissonDiskSampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\cameracontrolshelp.h -o release\moc_cameracontrolshelp.cpp
+	C:\Qt\Qt5.4.2\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/mkspecs/win32-g++ -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/include -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/src -IC:/Program -ID:/_myFiles/_SCHOOL/CIS700_Fanfu/Poisson-Disk-Sampler/_Code/PoissonSampler/Files/boost/boost_1_58_0 -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtMultimedia -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtNetwork -IC:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtCore -I. ..\PoissonSampler\src\cameracontrolshelp.h -o release\moc_cameracontrolshelp.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1743,6 +1743,9 @@ release/mainwindow.o: ../PoissonSampler/src/mainwindow.cpp ../PoissonSampler/src
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/qinputmethod.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QButtonGroup \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qbuttongroup.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QCheckBox \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qcheckbox.h \
+		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qgridlayout.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qlayout.h \
@@ -1775,7 +1778,6 @@ release/mainwindow.o: ../PoissonSampler/src/mainwindow.cpp ../PoissonSampler/src
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qmenubar.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QPushButton \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qpushbutton.h \
-		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtWidgets/QVBoxLayout \
 		../PoissonSampler/src/mygl.h \
 		C:/Qt/Qt5.4.2/5.4/mingw491_32/include/QtGui/QOpenGLVertexArrayObject \

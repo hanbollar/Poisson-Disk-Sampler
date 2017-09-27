@@ -28,7 +28,7 @@ MyGL::MyGL(QWidget *parent)
       gl_camera(),
       poissonSampler(nullptr), poissonMesh(nullptr),
       completeSFX(":/include/complete.wav"),
-      view_PBVH(false)
+      view_PBVH(false), view_OBJ(true)
 
 {
     // Connect the timer to a function so that when the timer ticks the function is executed
@@ -111,9 +111,14 @@ void MyGL::GLDrawScene()
     prog_lambert.setModelMatrix(glm::mat4(1.0f));
 
     if (poissonSampler == nullptr && poissonMesh != nullptr) {
-        prog_lambert.draw(*this, *poissonMesh);
+        if (view_OBJ) {
+            prog_lambert.draw(*this, *poissonMesh);
+        }
     } else if (poissonSampler != nullptr){
 
+        if (view_OBJ) {
+            prog_lambert.draw(*this, *poissonMesh);
+        }
         prog_flat.draw(*this, *poissonSampler);
         if (view_PBVH) {
             poissonSampler->bvh->drawAll(*this, prog_flat);
@@ -218,6 +223,7 @@ void MyGL::slot_loadPoissonObj() {
 
     Transform t = Transform();
     poissonMesh = new Mesh();
+    if (poissonSampler != nullptr) { poissonSampler = nullptr; }
     poissonMesh->LoadOBJ(file_name, local_path, t);
     poissonMesh->create();
 
@@ -227,5 +233,10 @@ void MyGL::slot_loadPoissonObj() {
 
 void MyGL::slot_viewPBVH(bool b) {
     view_PBVH = b;
+    this->update();
+}
+
+void MyGL::slot_viewOBJ(bool b) {
+    view_OBJ = b;
     this->update();
 }

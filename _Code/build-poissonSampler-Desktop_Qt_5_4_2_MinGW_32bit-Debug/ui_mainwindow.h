@@ -41,10 +41,11 @@ public:
     QWidget *layoutWidget_3;
     QGridLayout *gridLayout_4;
     QLabel *label_11;
-    QLabel *label_13;
-    QPushButton *poisson;
-    QPushButton *loadPoissonObj;
     QCheckBox *checkBox_viewBVH;
+    QLabel *label_13;
+    QPushButton *loadPoissonObj;
+    QPushButton *poisson;
+    QCheckBox *checkBox_viewOBJ;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuHelp;
@@ -89,7 +90,7 @@ public:
         groupBox_2->setBaseSize(QSize(631, 121));
         layoutWidget_3 = new QWidget(groupBox_2);
         layoutWidget_3->setObjectName(QStringLiteral("layoutWidget_3"));
-        layoutWidget_3->setGeometry(QRect(10, 20, 611, 96));
+        layoutWidget_3->setGeometry(QRect(10, 20, 611, 99));
         gridLayout_4 = new QGridLayout(layoutWidget_3);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -98,27 +99,33 @@ public:
         label_11 = new QLabel(layoutWidget_3);
         label_11->setObjectName(QStringLiteral("label_11"));
 
-        gridLayout_4->addWidget(label_11, 3, 0, 1, 1);
+        gridLayout_4->addWidget(label_11, 4, 0, 1, 1);
+
+        checkBox_viewBVH = new QCheckBox(layoutWidget_3);
+        checkBox_viewBVH->setObjectName(QStringLiteral("checkBox_viewBVH"));
+
+        gridLayout_4->addWidget(checkBox_viewBVH, 2, 1, 1, 1);
 
         label_13 = new QLabel(layoutWidget_3);
         label_13->setObjectName(QStringLiteral("label_13"));
 
         gridLayout_4->addWidget(label_13, 1, 1, 1, 1);
 
-        poisson = new QPushButton(layoutWidget_3);
-        poisson->setObjectName(QStringLiteral("poisson"));
-
-        gridLayout_4->addWidget(poisson, 2, 0, 1, 1);
-
         loadPoissonObj = new QPushButton(layoutWidget_3);
         loadPoissonObj->setObjectName(QStringLiteral("loadPoissonObj"));
 
         gridLayout_4->addWidget(loadPoissonObj, 1, 0, 1, 1);
 
-        checkBox_viewBVH = new QCheckBox(layoutWidget_3);
-        checkBox_viewBVH->setObjectName(QStringLiteral("checkBox_viewBVH"));
+        poisson = new QPushButton(layoutWidget_3);
+        poisson->setObjectName(QStringLiteral("poisson"));
 
-        gridLayout_4->addWidget(checkBox_viewBVH, 2, 1, 1, 1);
+        gridLayout_4->addWidget(poisson, 2, 0, 1, 1);
+
+        checkBox_viewOBJ = new QCheckBox(layoutWidget_3);
+        checkBox_viewOBJ->setObjectName(QStringLiteral("checkBox_viewOBJ"));
+        checkBox_viewOBJ->setChecked(true);
+
+        gridLayout_4->addWidget(checkBox_viewOBJ, 4, 1, 1, 1);
 
 
         verticalLayout->addWidget(groupBox_2);
@@ -147,6 +154,7 @@ public:
         QObject::connect(poisson, SIGNAL(clicked()), mygl, SLOT(slot_poissonClicked()));
         QObject::connect(loadPoissonObj, SIGNAL(clicked()), mygl, SLOT(slot_loadPoissonObj()));
         QObject::connect(checkBox_viewBVH, SIGNAL(clicked(bool)), mygl, SLOT(slot_viewPBVH(bool)));
+        QObject::connect(checkBox_viewOBJ, SIGNAL(clicked(bool)), mygl, SLOT(slot_viewOBJ(bool)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -159,10 +167,11 @@ public:
         actionCamera_Controls->setText(QApplication::translate("MainWindow", "Camera Controls", 0));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "Controls", 0));
         label_11->setText(QApplication::translate("MainWindow", "TextLabel", 0));
-        label_13->setText(QApplication::translate("MainWindow", "TextLabel", 0));
-        poisson->setText(QApplication::translate("MainWindow", "Poisson", 0));
-        loadPoissonObj->setText(QApplication::translate("MainWindow", "Load Poisson Obj", 0));
         checkBox_viewBVH->setText(QApplication::translate("MainWindow", "View BVH", 0));
+        label_13->setText(QApplication::translate("MainWindow", "TextLabel", 0));
+        loadPoissonObj->setText(QApplication::translate("MainWindow", "Load Poisson Obj", 0));
+        poisson->setText(QApplication::translate("MainWindow", "Poisson", 0));
+        checkBox_viewOBJ->setText(QApplication::translate("MainWindow", "View OBJ", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));
     } // retranslateUi
