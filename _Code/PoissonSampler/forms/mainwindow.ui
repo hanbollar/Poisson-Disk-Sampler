@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>651</width>
+    <height>747</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Poisson Sampler</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="MyGL" name="mygl">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>618</width>
+          <height>432</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>631</width>
+          <height>121</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>631</width>
+          <height>121</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Controls</string>
+        </property>
+        <widget class="QWidget" name="layoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>611</width>
+           <height>96</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="poisson">
+            <property name="text">
+             <string>Poisson</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="loadPoissonObj">
+            <property name="text">
+             <string>Load Poisson Obj</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="checkBox_viewBVH">
+            <property name="text">
+             <string>View BVH</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>651</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionCamera_Controls"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionCamera_Controls">
+   <property name="text">
+    <string>Camera Controls</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyGL</class>
+   <extends>QOpenGLWidget</extends>
+   <header>mygl.h</header>
+   <slots>
+    <signal>sig_ResizeToCamera(int,int)</signal>
+    <signal>sig_DisableGUI(bool)</signal>
+    <slot>slot_SceneDialog()</slot>
+    <slot>slot_SetNumSamplesSqrt(int)</slot>
+    <slot>slot_SetRecursionLimit(int)</slot>
+    <slot>slot_SetProgressiveRender(bool)</slot>
+    <slot>slot_SetIntegratorType(int)</slot>
+    <slot>slot_UseBVH(bool)</slot>
+    <slot>slot_SetMaxBVHPrims(int)</slot>
+    <slot>slot_poissonClicked()</slot>
+    <slot>slot_loadPoissonObj()</slot>
+    <slot>slot_viewPBVH(bool)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>mygl</sender>
+   <signal>sig_ResizeToCamera(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>slot_ResizeToCamera(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>305</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>396</x>
+     <y>32</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mygl</sender>
+   <signal>sig_DisableGUI(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>slot_DisableGUI(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>454</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>567</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>poisson</sender>
+   <signal>clicked()</signal>
+   <receiver>mygl</receiver>
+   <slot>slot_poissonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadPoissonObj</sender>
+   <signal>clicked()</signal>
+   <receiver>mygl</receiver>
+   <slot>slot_loadPoissonObj()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_viewBVH</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>mygl</receiver>
+   <slot>slot_viewPBVH(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>479</x>
+     <y>628</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slot_ResizeToCamera(int,int)</slot>
+  <slot>slot_DisableGUI(bool)</slot>
+ </slots>
+</ui>

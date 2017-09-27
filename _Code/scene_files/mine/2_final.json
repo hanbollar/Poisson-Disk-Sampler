@@ -1,0 +1,258 @@
+{
+  "frames" :[
+    {
+    "frameNumber" : 0,
+    "scene" : {
+      "camera" : {
+        "target" : [1, 2.7, 0],
+        "eye" : [-5, 5.5, -28],
+        "worldUp" : [0, 1, 0],
+        "fov" : 19.5,
+        "width" : 512,
+        "height": 512
+      },
+      "primitives" : [
+        {
+          "shape" : "SquarePlane",
+          "name" : "Floor",
+          "material" : "matteWhite",
+          "transform" : {
+            "translate" : [0, -2.5, -15],
+            "rotate" : [-90, 0, 0],
+            "scale" : [100, 100, 1]
+          }
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "Red wall",
+          "material" : "chromeMirror",
+          "transform" : {
+            "translate" : [5,2.5,0],
+            "rotate" : [0, -90, 0],
+            "scale" : [100, 10, 1]
+          }
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "Green Wall",
+          "material" : "chromeMirror",
+          "transform" : {
+            "translate" : [-5, 2.5, 0],
+            "rotate" : [0,90,0],
+            "scale" : [100, 10, 1]
+          }
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "Back Wall",
+          "material" : "chromeMirror",
+          "transform" : {
+            "translate" : [0,2.5,5],
+            "rotate" : [0,180,0],
+            "scale" : [10, 10, 1]
+          }
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "Ceiling Wall",
+          "material" : "matteWhite",
+          "transform" : {
+            "translate" : [0, 7.5, 0],
+            "rotate" : [90,0,0],
+            "scale" : [10, 100, 1]
+          }
+        },
+        {
+          "shape" : "Sphere",
+          "name" : "Long Cube",
+          "material" : "mirrorOne",
+          "transform" : {
+            "translate" : [3, 5, 3],
+            "rotate" : [0,0,0],
+            "scale" : [1.5, 1.5, 1.5]
+          }
+        },
+        {
+          "shape" : "Sphere",
+          "name" : "short Cube",
+          "material" : "mirrorTwo",
+          "transform" : {
+            "translate" : [0, 2, 0],
+            "rotate" : [0,0,0],
+            "scale" : [1.5, 1.5, 1.5]
+          }
+        },
+        {
+          "shape" : "Sphere",
+          "name" : "short Cube2",
+          "material" : "mirrorThree",
+          "transform" : {
+            "translate" : [-3, 0, -3],
+            "rotate" : [0,0,0],
+            "scale" : [1.5, 1.5, 1.5]
+          }
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "textured plane",
+          "material" : "chromeMirrorBack",
+          "transform" : {
+            "translate" : [0, 0, -28.1],
+            "rotate" : [0,0,0],
+            "scale" : [20, 20, 1]
+          }
+        }
+      ],
+      "lights" : [
+        {
+          "shape" : "SquarePlane",
+          "name" : "Light Source Red",
+          "type" : "DiffuseAreaLight",
+          "lightColor" : [17,4,4],
+          "intensity" : 1,
+          "transform" : {
+            "translate" : [2,7.45,0],
+            "rotate" : [90,0,0],
+            "scale" : [3, 3, 1]
+          },
+          "isDelta" : false,
+          "twoSided" : true
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "Light Source BlueCeiling",
+          "type" : "DiffuseAreaLight",
+          "lightColor" : [4,5,17],
+          "intensity" : 1,
+          "transform" : {
+            "translate" : [-2,7.45,0],
+            "rotate" : [90,0,0],
+            "scale" : [3, 3, 1]
+          },
+          "isDelta" : false,
+          "twoSided" : true
+        },
+        {
+          "shape" : "Sphere",
+          "name" : "Light Source Blue",
+          "type" : "DiffuseAreaLight",
+          "lightColor" : [4,10,17],
+          "intensity" : 0.7,
+          "transform" : {
+            "translate" : [1,-2.5,0],
+            "rotate" : [0,0,0],
+            "scale" : [1.5, 1, 1.5]
+          },
+          "isDelta" : false,
+          "twoSided" : true
+        },
+        {
+          "shape" : "SquarePlane",
+          "name" : "Light Source 2",
+          "type" : "DiffuseAreaLight",
+          "lightColor" : [1,1,1],
+          "intensity" : 8,
+          "transform" : {
+            "translate" : [0,-2.45,0],
+            "rotate" : [-90,0,0],
+            "scale" : [1, 1, 1]
+          },
+          "isDelta" : false,
+          "twoSided" : false
+        }
+      ],
+      "materials" : [
+                {
+          "type" : "MatteMaterial",
+          "name" : "matteWhite",
+            "Kd" : [0.85, 0.81, 0.78],
+          "sigma": 0
+        },
+        {
+          "type" : "MatteMaterial",
+          "name" : "matteRed",
+          "Kd" : [0.63, 0.065, 0.05],
+          "sigma": 0
+        },
+        {
+          "type" : "MatteMaterial",
+          "name" : "matteBlue",
+          "Kd" : [0.065, 0.05, 0.63],
+          "sigma": 0
+        },
+        {
+          "type" : "MatteMaterial",
+          "name" : "matteGreen",
+          "Kd" : [0.14, 0.45, 0.091],
+          "sigma": 0
+        },
+        {
+          "type": "MatteMaterial",
+          "name": "texturedMaterial",
+          "Kd": [1, 1, 1],
+          "textureMap": "197.jpg"
+        },
+        {
+          "type": "MirrorMaterial",
+          "name": "chromeMirror",
+          "Kr": [1, 1, 1]
+        },
+        {
+          "type": "GlassMaterial",
+          "name": "transmissiveMaterial1",
+          "Kd" : [0.63, 0.065, 0.05],
+          "Kt": [0.5, 0.5, 1],
+          "Kr": [1, 1, 1],
+          "eta": 1.55
+        },
+        {
+          "type": "GlassMaterial",
+          "name": "transmissiveMaterial2",
+          "Kd" : [0.63, 0.065, 0.05],
+          "Kt": [0.9, 0.9, 1],
+          "Kr": [1, 1, 0.2],
+          "eta": 1.55
+        },
+        {
+          "type": "MirrorMaterial",
+          "name": "chromeMirrorBack",
+          "Kd" : [0.06, 0.2, 0.63],
+          "Kr": [1, 1, 1],
+          "roughness": 0.1,
+          "roughnessMap": "197.jpg"
+        },
+        {
+          "type": "MirrorMaterial",
+          "name": "mirrorOne",
+          "Kd" : [0.63, 0.1, 0.1],
+          "Kr": [1, 1, 1],
+          "roughness": 0.0,
+          "roughnessMap": "154.jpg"
+        },
+        {
+          "type": "MirrorMaterial",
+          "name": "mirrorTwo",
+          "Kd" : [0.1, 0.63, 0.1],
+          "Kr": [1, 1, 1],
+          "roughness": 0.3,
+          "roughnessMap": "154.jpg"
+        },
+        {
+          "type": "MirrorMaterial",
+          "name": "mirrorThree",
+          "Kd" : [0.1, 0.1, 0.63],
+          "Kr": [1, 1, 1],
+          "roughness": 0.75,
+          "roughnessMap": "154.jpg"
+        },
+        {
+          "type": "MatteMaterial",
+          "name": "MissingWall",
+          "Kd": [1, 1, 1],
+          "textureMap": "154.jpg"
+        }
+      ]
+    }
+  }
+]
+}

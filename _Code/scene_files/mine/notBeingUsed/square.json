@@ -1,0 +1,11 @@
+{
+	"objects":
+	[
+		{
+			"type": "obj",
+			"name": "Square",
+			"filename": "square.obj",
+			"texture": "171.JPG"
+		}
+	]
+}
