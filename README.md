@@ -46,7 +46,7 @@ There are two different ways to do the mesh check:
 In terms of runtime, implementation (1) and (2) both end up checking the same number of samples against the given object; however (2) is the better implementation overall since there is fewer restrictions as to how the points spread. In the following two photos, the bluer the point the older it is and the whiter the point, the newer it is. As the first image for implementation (1) demonstrates, the sampling iterates out from the center yet it becomes less and less likely for new samples to be created in oddly shaped sections like the legs and head, just because there are fewer previously existing samples around them, since in this implementation we are culling samples as they are being created. In contrast, the second image for implementation (2) demonstrates that the lack of restrictions in creating the sample in the first place by only culling all samples at the end is much more effective as it allows existing samples around the harder to reach places making it just as likely for a sample to exist in the head compared to the legs of the cow.
 
 <p align="center">
-<img width="30%" src="./Info/img/justObjCheck.jpg"> <img width="35%" src="./Info/img/cubeThenObj.jpg">
+<img width="33.5%" src="./Info/img/justObjCheck.jpg"><p style="text-indent: 5em;"></p><img width="35%" src="./Info/img/cubeThenObj.jpg">
 </p>
 
 ### Uses:
