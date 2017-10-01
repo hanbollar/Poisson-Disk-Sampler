@@ -31,7 +31,7 @@ The final created background grid contains all valid samples as defined by the R
 
 ### BVH:
 
-First we set up our bounding box for a simple mesh, in this case a cube. The bounding box becomes fundamental when doing mesh intersection checking for if a new sample is valid in the object it is to be filling. Then, we use a the surface area heuristic on our bvh's treenode structure to know when to stop splitting the list of triangles into more children.
+First we set up our bounding box for a simple mesh, in this case a cube. The bounding box becomes fundamental when doing mesh intersection checking for if a new sample is valid in the object it is to be filling. Then, we use the surface area heuristic on our bvh's treenode structure to know when to stop splitting the list of triangles into more children.
 
 <p align="center">
 <img width="20%" src="./Info/img/boundingBox.jpg"><img width="10%" src="./Info/img/rightArrow.jpg"><img width = "35%" src="./Info/img/bvhOnCow.jpg">
