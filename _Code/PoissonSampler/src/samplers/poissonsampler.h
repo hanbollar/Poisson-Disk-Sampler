@@ -30,7 +30,7 @@ public:
 
     Sampler samp;
     int numPoints;
-    float RADIUS = 0.2f;
+    float RADIUS = 0.3f;
 
     std::vector<Sample*> finalSamples;
 
@@ -39,6 +39,7 @@ public:
 
     glm::vec3 posToGridLoc(glm::vec3 p);
     bool validLocWithinObj(glm::vec3 p);
+    bool validWithinOuterBox(glm::vec3 p);
 
     glm::vec3 randomLocAround(glm::vec3 pos);
 

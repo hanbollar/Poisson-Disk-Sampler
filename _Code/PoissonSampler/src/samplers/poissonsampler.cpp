@@ -70,6 +70,7 @@ void PoissonSampler::poissonAlg(){
 
     // set up pointer list of valid samples
     std::vector<Sample*> activeValidSamples(0, nullptr);
+    std::vector<Sample*> finSamples(0, nullptr);
 
     std::vector<std::vector<std::vector<Sample*>>> backgroundGrid
             = std::vector<std::vector<std::vector<Sample*>>>(
@@ -90,7 +91,7 @@ void PoissonSampler::poissonAlg(){
     backgroundGrid[randGridLoc[0]][randGridLoc[1]][(threeDim) ? randGridLoc[2] : 0] = start;
 
     // number of samples tested at each x_i in the while loop [kept constant]
-    int K = 50;
+    int K = 25;
 
     std::cout<<"poissonSampler::poissonAlg beginning the while loop"<<std::endl;
 
@@ -100,14 +101,14 @@ void PoissonSampler::poissonAlg(){
     //      generate k pts chosen uniformly between RADIUS and 2RADIUS around the current loc
     //      For each pt k {
     //          not valid sample if (1) within RADIUS of any existing samples (2) not within given mesh obj
-    //          if valid then add to active list
+    //       g   if valid then add to active list
     //      } if after all checked and no k were added --> remove x_i from active list
     // return completed list of samples
     while(activeValidSamples.size() > 0) {
 
         Sample* x_i = activeValidSamples[(int)( samp.Get2D().x * activeValidSamples.size())];
 //        std::cout<<"x_i gridpos: "<<x_i->gridLoc[0]<<","<<x_i->gridLoc[1]<<","<<x_i->gridLoc[2]<<std::endl;
-        std::cout<</*"sample x_i pos: "<<x_i->pos[0]<<","<<x_i->pos[1]<<","<<x_i->pos[2]<<*/": active: "<<activeValidSamples.size()<<": finished: "<<finalSamples.size()<<std::endl;
+        std::cout<</*"sample x_i pos: "<<x_i->pos[0]<<","<<x_i->pos[1]<<","<<x_i->pos[2]<<*/": active: "<<activeValidSamples.size()<<": finished: "<<finSamples.size()<<std::endl;
 
         bool addedK = false;
         for (int i=0; i<K; i++) {
@@ -150,7 +151,7 @@ void PoissonSampler::poissonAlg(){
             }//end: for (int i = checkingMin[0]; i < checkingMax[0]; i++);
 
 //             std::cout<<"    valid in Grid at loc:"<<gLoc[0]<<","<<gLoc[1]<<","<<gLoc[2]<<": "<<valid<<" valid in Obj: "<<validLocWithinObj(pos)<<" at pos: "<<pos[0]<<","<<pos[1]<<","<<pos[2]<<std::endl;
-            if (valid && validLocWithinObj(pos)) {
+            if (valid && validWithinOuterBox(pos)) {
 //                std::cout<<"        added"<<std::endl;
                 // valid then create and add to grid
                 Sample* kPoint = new Sample(gLoc, pos, activeValidSamples.size() + i);
@@ -166,7 +167,7 @@ void PoissonSampler::poissonAlg(){
         if (!addedK) {
 
             //none of x_i's newly created samples were added so x_i no longer a valid active sample - add to list of final samples
-            finalSamples.push_back(new Sample(x_i));
+            finSamples.push_back(new Sample(x_i));
             numPoints += 1;
             activeValidSamples.erase(std::remove(activeValidSamples.begin(), activeValidSamples.end(), x_i),
                                      activeValidSamples.end());
@@ -174,6 +175,12 @@ void PoissonSampler::poissonAlg(){
         }
 
     } //end: while(activeValidSamples.size() > 0)
+
+    for (Sample* s : finSamples) {
+        if (validLocWithinObj(s->pos)) {
+            finalSamples.push_back(s);
+        }
+    }
 
     std::cout<<"poissonSampler::poissonAlg finished"<<std::endl;
 }
@@ -244,6 +251,11 @@ glm::vec3 PoissonSampler::posToGridLoc(glm::vec3 p) {
     return glm::vec3(x, y, z);
 }
 
+bool PoissonSampler::validWithinOuterBox(glm::vec3 p) {
+        return (p.x > bbox->min[0] && p.y > bbox->min[1] && p.z > bbox->min[2]
+                && p.x < bbox->max[0] && p.y < bbox->max[1] && p.z < bbox->max[2]);
+}
+
 /**
  * @brief sampleWithinObj - checks if given sampled location is within the object being checked
  * @param p: the position of the given sample - so can check if within given obj to fill
@@ -263,7 +275,7 @@ bool PoissonSampler::validLocWithinObj(glm::vec3 p) {
         bool intersects = bvh->intersect(r, &isx, &numIsx, s.camera.GetViewProj());
         if (intersects) {
 
-            return (numIsx %2 == 0) ? false : true;
+            return (numIsx %2 == 0) ? false : ((numIsx > 0) ? true: false);
         }
     } /*else {
 
